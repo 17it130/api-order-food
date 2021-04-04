@@ -18,12 +18,13 @@ class UserRepository implements UserRepositoryInterface {
 
     public function show($id)
     {
-        return User::findOrFail($id);
+        return User::with('order')
+                    ->findOrFail($id);
     }
 
     public function update($data, $id)
     {
-        return User::where('id', $id)->update([$data]);
+        return User::where('id', $id)->update($data);
     }
 
     public function store($data)

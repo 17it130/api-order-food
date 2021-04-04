@@ -9,4 +9,8 @@ class Food extends Model
 {
     use HasFactory;
     protected $table = "foods";
+
+    public function order_detail() {
+        return $this->hasOne(OrderDetail::class);
+    }
 }
