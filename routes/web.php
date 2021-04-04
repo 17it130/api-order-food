@@ -14,4 +14,3 @@ use App\Http\Controllers\FoodController;
 |
 */
 
-Route::get('/', [FoodController::class, 'index']);

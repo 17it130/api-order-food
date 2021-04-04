@@ -2,14 +2,16 @@
 
 namespace App\Repositories;
 
-interface FoodRepositoryInterface {
+interface UserRepositoryInterface {
     public function getAll();
 
-    public function store($data);
+    public function getUsersByRole($role);
 
     public function show($id);
 
     public function update($data, $id);
+
+    public function store($data);
 
     public function delete($id);
 }

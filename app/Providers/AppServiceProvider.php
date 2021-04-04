@@ -15,7 +15,9 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->bind(
             'App\Repositories\FoodRepositoryInterface',
-            'App\Repositories\FoodRepository'
+            'App\Repositories\FoodRepository',
+            'App\Repositories\UserRepositoryInterface',
+            'App\Repositories\UserRepository'
         );
     }
 
