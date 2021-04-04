@@ -17,7 +17,11 @@ class AppServiceProvider extends ServiceProvider
             'App\Repositories\FoodRepositoryInterface',
             'App\Repositories\FoodRepository',
             'App\Repositories\UserRepositoryInterface',
-            'App\Repositories\UserRepository'
+            'App\Repositories\UserRepository',
+            'App\Repositories\SocialRepositoryInterface',
+            'App\Repositories\SocialRepository',
+            'App\Repositories\OrderRepositoryInterface',
+            'App\Repositories\OrderRepository'
         );
     }
 

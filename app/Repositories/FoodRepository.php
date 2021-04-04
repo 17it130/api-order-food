@@ -23,7 +23,7 @@ class FoodRepository implements FoodRepositoryInterface {
 
     public function update($data, $id)
     {
-        return Food::where('id', $id)->update([$data]);
+        return Food::where('id', $id)->update($data);
     }
 
     public function delete($id)
