@@ -1,7 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\FoodController;
+use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\FoodController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,3 +16,9 @@ use App\Http\Controllers\FoodController;
 |
 */
 
+Route::prefix('admin')->group(function() {
+    Route::get('/dang-nhap', [AuthController::class, 'index'])->name('auth.index')->middleware('guest');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
+    // Route::get('/food', [FoodController::class, 'index'])->name('food.index');
+    Route::resource('/food', FoodController::class);
+});
