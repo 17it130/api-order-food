@@ -13,13 +13,15 @@ class AuthController extends Controller
     protected $userService;
     protected $socialService;
 
-    public function __construct(UserService $userService, SocialService $socialService) {
+    public function __construct(UserService $userService, SocialService $socialService)
+    {
         $this->userService = $userService;
         $this->socialService = $socialService;
     }
 
-    public function loginWithGoogle(Request $request) {
-//        $client = new \Google_Client(['client_id' => '1086092518209-ftnve6v9u2v5fpundc1t9oc56r0gthhl.apps.googleusercontent.com']);
+    public function loginWithGoogle(Request $request)
+    {
+        //        $client = new \Google_Client(['client_id' => '1086092518209-ftnve6v9u2v5fpundc1t9oc56r0gthhl.apps.googleusercontent.com']);
         $client = new \Google_Client(['client_id' => '407408718192.apps.googleusercontent.com']);
         $payload = $client->verifyIdToken($request->input('id_token'));
 
@@ -56,7 +58,8 @@ class AuthController extends Controller
         }
     }
 
-    public function generateToken($user) {
+    public function generateToken($user)
+    {
         if (!$userToken = JWTAuth::fromUser($user)) {
             return response()->json([
                 'status' => 0,

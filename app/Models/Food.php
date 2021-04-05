@@ -13,4 +13,8 @@ class Food extends Model
     public function order_detail() {
         return $this->hasOne(OrderDetail::class);
     }
+
+    public function category() {
+        return $this->belongsTo(Category::class);
+    }
 }

@@ -30,4 +30,9 @@ class FoodRepository implements FoodRepositoryInterface {
     {
        return Food::findOrFail($id)->delete();
     }
+
+    public function getFoodByCategoryId($cat_id)
+    {
+        return Food::where('category_id', $cat_id)->get();
+    }
 }

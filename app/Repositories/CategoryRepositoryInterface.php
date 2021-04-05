@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-interface FoodRepositoryInterface {
+interface CategoryRepositoryInterface {
     public function getAll();
 
     public function store($data);
@@ -12,6 +12,4 @@ interface FoodRepositoryInterface {
     public function update($data, $id);
 
     public function delete($id);
-
-    public function getFoodByCategoryId($cat_id);
 }

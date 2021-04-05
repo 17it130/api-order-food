@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Services\NotificationService;
 use App\Services\OrderService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -12,12 +13,16 @@ use PHPUnit\Exception;
 class OrderController extends Controller
 {
     protected $orderService;
+    protected $notificationService;
 
-    public function __construct(OrderService $orderService) {
+    public function __construct(OrderService $orderService, NotificationService $notificationService)
+    {
         $this->orderService = $orderService;
+        $this->notificationService = $notificationService;
     }
 
-    public function getAll() {
+    public function getAll()
+    {
         try {
             $result = [
                 'status' => 1,
@@ -33,7 +38,8 @@ class OrderController extends Controller
         return response()->json($result);
     }
 
-    public function show($id) {
+    public function show($id)
+    {
         try {
             $result = [
                 'status' => 1,
@@ -49,7 +55,8 @@ class OrderController extends Controller
         return response()->json($result);
     }
 
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         try {
             $data = [
                 'order_date' => Carbon::now(),
@@ -73,9 +80,17 @@ class OrderController extends Controller
                 $this->orderService->storeOrderDetail($detail_data);
             }
 
+            $notification_data = [
+                'title' => 'Đặt món ăn thành công',
+                'content' => 'Bạn đã đặt món thành công',
+                'user_id' => Auth::user()->id
+            ];
+
+            $this->notificationService->store($notification_data);
+
             $result = [
                 'status' => 1,
-                'message' => 'Order successfull'
+                'message' => 'Order successfully'
             ];
         } catch (Exception $e) {
             $result = [
@@ -87,7 +102,8 @@ class OrderController extends Controller
         return response()->json($result);
     }
 
-    public function update(Request $request, $id) {
+    public function update(Request $request, $id)
+    {
         try {
             $data = [
                 'totalPrice' => $request->input('totalPrice'),
@@ -108,9 +124,19 @@ class OrderController extends Controller
                 $this->orderService->updateOrderDetail($detail_data, $id);
             }
 
+            if ($request->input('payment_id')) {
+                $notification_data = [
+                    'title' => 'Thành toán thành công',
+                    'content' => 'Bạn đã thanh toán thành công',
+                    'user_id' => Auth::user()->id
+                ];
+
+                $this->notificationService->store($notification_data);
+            }
+
             $result = [
                 'status' => 1,
-                'message' => 'Update order successfull'
+                'message' => 'Update order successfully'
             ];
         } catch (Exception $e) {
             $result = [
@@ -122,12 +148,13 @@ class OrderController extends Controller
         return response()->json($result);
     }
 
-    public function removeItemInOrderDetail($id) {
+    public function removeItemInOrderDetail($id)
+    {
         try {
             $this->orderService->removeItemInOrderDetail($id);
             $result = [
                 'status' => 1,
-                'message' => 'Remove item successfull'
+                'message' => 'Remove item successfully'
             ];
         } catch (Exception $e) {
             $result = [
