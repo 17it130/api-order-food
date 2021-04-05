@@ -13,6 +13,10 @@
                 </li>
 
                 <li>
+                    <a href="{{ route('category.index') }}" class="waves-effect"><i class="ti-menu-alt"></i><span> Quản lý danh mục </span></a>
+                </li>
+
+                <li>
                     <a href="{{ route('food.index') }}" class="waves-effect"><i class="ti-menu-alt"></i><span> Quản lý món ăn </span></a>
                 </li>
 

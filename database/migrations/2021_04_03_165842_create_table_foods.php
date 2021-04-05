@@ -20,6 +20,7 @@ class CreateTableFoods extends Migration
             $table->double('price');
             $table->double('rating')->default(0);
             $table->integer('shop_id');
+            $table->integer('category_id');
             $table->timestamps();
         });
     }
