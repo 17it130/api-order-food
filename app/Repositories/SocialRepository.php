@@ -6,7 +6,8 @@ namespace App\Repositories;
 
 use App\Models\SocialAccount;
 
-class SocialRepository implements SocialRepositoryInterface {
+class SocialRepository implements SocialRepositoryInterface
+{
 
     public function store($data)
     {
@@ -25,7 +26,8 @@ class SocialRepository implements SocialRepositoryInterface {
 
     public function getBySocialId($social_id)
     {
-        return SocialAccount::where('social_id', $social_id)
+        return SocialAccount::with('user')
+            ->where('social_id', $social_id)
             ->first();
     }
 }

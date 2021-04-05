@@ -18,6 +18,7 @@ class CreateTableFoods extends Migration
             $table->string('name');
             $table->string('images');
             $table->double('price');
+            $table->text('string');
             $table->double('rating')->default(0);
             $table->integer('shop_id');
             $table->integer('category_id');

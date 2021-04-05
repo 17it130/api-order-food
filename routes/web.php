@@ -17,10 +17,12 @@ use App\Http\Controllers\Admin\FoodController;
 |
 */
 
-Route::prefix('admin')->group(function () {
-    Route::get('/dang-nhap', [AuthController::class, 'index'])->name('auth.index')->middleware('guest');
+Route::get('/login', [AuthController::class, 'index'])->name('auth.index')->middleware('guest');
+Route::get('/google', [AuthController::class, 'redirectToGoogle'])->name('auth.gRedirect');
+Route::get('/google/callback', [AuthController::class, 'handleGoogleCallback']);
+
+Route::group(['prefix' => 'admin', 'middleware' => ['isAuth', 'revalidate']], function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
-    // Route::get('/food', [FoodController::class, 'index'])->name('food.index');
     Route::resource('/food', FoodController::class);
     Route::resource('/category', CategoryController::class);
 });
