@@ -17,8 +17,9 @@ use App\Http\Controllers\Admin\FoodController;
 */
 
 Route::prefix('admin')->group(function() {
-    Route::get('/dang-nhap', [AuthController::class, 'index'])->name('auth.index')->middleware('guest');
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
-    // Route::get('/food', [FoodController::class, 'index'])->name('food.index');
-    Route::resource('/food', FoodController::class);
+    Route::get('/login', [AuthController::class, 'index'])->name('auth.index')->middleware('guest');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/food', [FoodController::class, 'getAll'])->name('food.index');
+    Route::get('/food/{id}', [FoodController::class, 'show'])->name('food.edit');
+    Route::post('/food/{id}', [FoodController::class, 'update'])->name('food.update');
 });

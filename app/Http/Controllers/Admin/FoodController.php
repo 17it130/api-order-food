@@ -3,123 +3,65 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Food;
+use App\Services\FoodService;
 use Illuminate\Http\Request;
+use PHPUnit\Exception;
+
+use App\Http\Requests\FoodRequest;
+use App\Models\Food;
+use Illuminate\Support\Facades\Storage;
 
 class FoodController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index() {
-        $foods = Food::all();
+    protected $foodService;
 
-        return view('admin.pages.food.index');
+    public function __construct(FoodService $foodService) {
+        $this->foodService = $foodService;
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        $categories = Category::where('status', 1)
-            ->where('type', '<>', 4)
-            ->get();
+    public function getAll() {
+        $foods = $this->foodService->getAll();
 
-        return view('admin.pages.category.createOrUpdate', compact('categories'));
+        return view('admin.pages.food.index', compact('foods'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(CategoryRequest $request)
-    {
-        $category_data = $this->handleFormRequest($request);
-        Category::create($category_data);
+    public function show($id) {
+        $food = $this->foodService->show($id);
+        $category = 1;
 
-        return redirect()->route('danh-muc.index')->with('add', true);
-    }
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
+        return view('admin.pages.food.createOrUpdate', compact('food', 'category'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        $category = Food::findOrFail($id);
+    public function update(Request $request) {
+        $food_old = $this->foodService->show($request->id);
 
-        return view('admin.pages.food.createOrUpdate', compact('category'));
-    }
+        if($request->has('images')) {
+            $oldImage = str_replace('/storage', '', $food_old->images);
+            if(Storage::disk('public')->exists($oldImage)) {
+                Storage::disk('public')->delete($oldImage);
+            }
+            $file = $request->file('images');
+            $path = Storage::disk('public')->put('foods',$file);
+            $food_data['images'] = "/storage/".$path;
+        }
+        
+        if($request->has('name')) {
+            $food_data['name'] = $request->name;
+        }
+        if($request->has('price')) {
+            $food_data['price'] = $request->price;
+        }
+        if($request->has('rating')) {
+            $food_data['rating'] = $request->rating;
+        } else {
+            $food_data['rating'] = $food_old->rating;
+        }
+        if($request->has('shop_id')) {
+            $food_data['shop_id'] = $request->shop_id;
+        }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(CategoryRequest $request, $id)
-    {
-        $category = Category::findOrFail($id);
-
-        $category_data = $this->handleFormRequest($request);
-        $category->update($category_data);
+        $this->foodService->update($food_data, $request->id);
 
         return redirect()->back()->with('edit', true);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        Category::findOrFail($id)->delete();
-
-        return response()->json(true);
-    }
-
-    public function handleFormRequest(Request  $request, $category_data = []) {
-        if ($request->input('parent_id')) {
-            $category_data['parent_id'] = $request->input('parent_id');
-        }
-        if ($request->input('type')) {
-            $category_data['type'] = $request->input('type');
-        }
-        if ($request->input('category')) {
-            $category_data['vi'] = [
-                'category' => $request->input('category'),
-                'slug' => Str::slug($request->input('category'))
-            ];
-        }
-        if ($request->input('category_en')) {
-            $category_data['en'] = [
-                'category' => $request->input('category_en'),
-                'slug' => Str::slug($request->input('category_en'))
-            ];
-        }
-
-        return $category_data;
     }
 }

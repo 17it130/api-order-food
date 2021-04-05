@@ -21,8 +21,7 @@
                             <th>#</th>
                             <th>Tên</th>
                             <th>Ảnh</th>
-                            <th>Mô tả</th>
-                            <th>Gía</th>
+                            <th>Giá</th>
                             <th>Đánh giá</th>
                             <th>Cửa hàng</th>
                             <th>Thao tác</th>
@@ -30,40 +29,24 @@
                     </thead>
 
                     <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>System Architect</td>
-                            <td>Edinburgh</td>
-                            <td>61</td>
-                            <td>2011/04/25</td>
-                            <td>$320,800</td>
-                            <td>2011/04/25</td>
-                            <td class="text-center">
-                                <a href="" class="btn btn-sm btn-primary js-tooltip-enabled" data-toggle="tooltip" title="Chỉnh sửa" data-original-title="Chỉnh sửa">
-                                    <i class="fa fa-pencil-alt"></i>
-                                </a>
-                                <button type="button" onclick="" class="btn btn-sm btn-danger js-tooltip-enabled" data-toggle="tooltip" title="Xóa" data-original-title="Xóa">
-                                    <i class="fa fa-times"></i>
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>System Architect</td>
-                            <td>Edinburgh</td>
-                            <td>50</td>
-                            <td>2011/04/25</td>
-                            <td>$320,800</td>
-                            <td>2011/04/25</td>
-                            <td class="text-center">
-                                <a href="" class="btn btn-sm btn-primary js-tooltip-enabled" data-toggle="tooltip" title="Chỉnh sửa" data-original-title="Chỉnh sửa">
-                                    <i class="fa fa-pencil-alt"></i>
-                                </a>
-                                <button type="button" onclick="" class="btn btn-sm btn-danger js-tooltip-enabled" data-toggle="tooltip" title="Xóa" data-original-title="Xóa">
-                                    <i class="fa fa-times"></i>
-                                </button>
-                            </td>
-                        </tr>
+                        @foreach($foods as $food)
+                            <tr>
+                                <td>{{ $loop->index }}</td>
+                                <td>{{ $food->name }}</td>
+                                <td>{{ $food->images }}</td>
+                                <td>{{ $food->price }}</td>
+                                <td>{{ $food->rating }}</td>
+                                <td>{{ $food->shop_id }}</td>
+                                <td class="text-center">
+                                    <a href="{{ route('food.edit', $food->id) }}" class="btn btn-sm btn-primary js-tooltip-enabled" data-toggle="tooltip" title="Chỉnh sửa" data-original-title="Chỉnh sửa">
+                                        <i class="fa fa-pencil-alt"></i>
+                                    </a>
+                                    <button type="button" onclick="" class="btn btn-sm btn-danger js-tooltip-enabled" data-toggle="tooltip" title="Xóa" data-original-title="Xóa">
+                                        <i class="fa fa-times"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        @endforeach
                     </tbody>
                 </table>
 
@@ -75,5 +58,22 @@
 @endsection
 
 @push('js')
-    
+    <!-- Required datatable js -->
+    <script src="{{ asset('admin/assets/plugins/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('admin/assets/plugins/datatables/dataTables.bootstrap4.min.js') }}"></script>
+    <!-- Buttons examples -->
+    <script src="{{ asset('admin/assets/plugins/datatables/dataTables.buttons.min.js') }}"></script>
+    <script src="{{ asset('admin/assets/plugins/datatables/buttons.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('admin/assets/plugins/datatables/jszip.min.js') }}"></script>
+    <script src="{{ asset('admin/assets/plugins/datatables/pdfmake.min.js') }}"></script>
+    <script src="{{ asset('admin/assets/plugins/datatables/vfs_fonts.js') }}"></script>
+    <script src="{{ asset('admin/assets/plugins/datatables/buttons.html5.min.js') }}"></script>
+    <script src="{{ asset('admin/assets/plugins/datatables/buttons.print.min.js') }}"></script>
+    <script src="{{ asset('admin/assets/plugins/datatables/buttons.colVis.min.js') }}"></script>
+    <!-- Responsive examples -->
+    <script src="{{ asset('admin/assets/plugins/datatables/dataTables.responsive.min.js') }}"></script>
+    <script src="{{ asset('admin/assets/plugins/datatables/responsive.bootstrap4.min.js') }}"></script>
+
+    <!-- Datatable init js -->
+    <script src="{{ asset('admin/assets/pages/datatables.init.js') }}"></script>
 @endpush

@@ -4,27 +4,27 @@
     <div class="topbar-left">
         <a href="index.html" class="logo">
             <span>
-                    <img src="assets/images/logo-light.png" alt="" height="18">
+                    <img src="{{ asset('admin/assets/images/logo-light.png') }}" alt="" height="18">
                 </span>
             <i>
-                    <img src="assets/images/logo-sm.png" alt="" height="22">
+                    <img src="{{ asset('admin/assets/images/logo-sm.png') }}" alt="" height="22">
                 </i>
         </a>
     </div>
 
     <nav class="navbar-custom">
         <ul class="navbar-right list-inline float-right mb-0">
-            <li class="dropdown notification-list list-inline-item d-none d-md-inline-block">
+            <!-- <li class="dropdown notification-list list-inline-item d-none d-md-inline-block">
                 <form role="search" class="app-search">
                     <div class="form-group mb-0">
                         <input type="text" class="form-control" placeholder="Search..">
                         <button type="submit"><i class="fa fa-search"></i></button>
                     </div>
                 </form>
-            </li>
+            </li> -->
 
             <!-- language-->
-            <li class="dropdown notification-list list-inline-item d-none d-md-inline-block">
+            <!-- <li class="dropdown notification-list list-inline-item d-none d-md-inline-block">
                 <a class="nav-link dropdown-toggle arrow-none waves-effect" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
                     <img src="assets/images/flags/us_flag.jpg" class="mr-2" height="12" alt=""/> English <span class="mdi mdi-chevron-down"></span>
                 </a>
@@ -35,7 +35,7 @@
                     <a class="dropdown-item" href="#"><img src="assets/images/flags/spain_flag.jpg" alt="" height="16" /><span> Spanish </span></a>
                     <a class="dropdown-item" href="#"><img src="assets/images/flags/russia_flag.jpg" alt="" height="16" /><span> Russian </span></a>
                 </div>
-            </li>
+            </li> -->
 
             <!-- full screen -->
             <li class="dropdown notification-list list-inline-item d-none d-md-inline-block">
@@ -91,7 +91,7 @@
             <li class="dropdown notification-list list-inline-item">
                 <div class="dropdown notification-list nav-pro-img">
                     <a class="dropdown-toggle nav-link arrow-none waves-effect nav-user" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
-                        <img src="assets/images/users/user-4.jpg" alt="user" class="rounded-circle">
+                        <img src="{{ asset('admin/assets/images/users/user-4.jpg') }}" alt="user" class="rounded-circle">
                     </a>
                     <div class="dropdown-menu dropdown-menu-right profile-dropdown ">
                         <!-- item-->
