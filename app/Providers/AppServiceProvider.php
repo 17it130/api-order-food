@@ -21,7 +21,11 @@ class AppServiceProvider extends ServiceProvider
             'App\Repositories\SocialRepositoryInterface',
             'App\Repositories\SocialRepository',
             'App\Repositories\OrderRepositoryInterface',
-            'App\Repositories\OrderRepository'
+            'App\Repositories\OrderRepository',
+            'App\Repositories\CategoryRepositoryInterface',
+            'App\Repositories\CategoryRepository',
+            'App\Repositories\NotificationRepositoryInterface',
+            'App\Repositories\NotificationRepository'
         );
     }
 
