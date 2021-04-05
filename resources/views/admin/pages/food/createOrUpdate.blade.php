@@ -1,5 +1,5 @@
 @extends('admin.layouts.app')
-@section('title', isset($category) ? 'Chỉnh sửa món ăn' : 'Thêm mới món ăn')
+@section('title', isset($food) ? 'Chỉnh sửa món ăn' : 'Thêm mới món ăn')
 
 @push('css')
     <link href="{{ asset('admin/flags/css/flag-icon.min.css') }}" rel="stylesheet">
@@ -15,14 +15,15 @@
                 <p class="text-muted m-b-30 font-14">A powerful jQuery wizard plugin that
                     supports accessibility and HTML5</p> -->
 
-                @if(isset($edit))
-                    <h1>{{$edit}}</h1>
+                @if(isset($food))
+                    <form method="POST" action="{{ route('food.update', $food->id) }}" enctype='multipart/form-data' id="form-horizontal" class="form-horizontal form-wizard-wrapper">
+                    @method('PUT')
+                @else
+                    <form method="POST" action="{{ route('food.store') }}" enctype='multipart/form-data' id="form-horizontal" class="form-horizontal form-wizard-wrapper">  
                 @endif
-
-                <form method="POST" action="{{ route('food.update', $food->id) }}" enctype='multipart/form-data' id="form-horizontal" class="form-horizontal form-wizard-wrapper">
                     @csrf
+                    
                     <!-- <h3>Seller Details</h3> -->
-                    <input value="{{ $food->id }}" name="id" id="id" style="display: none" />
                     <fieldset>
                         <div class="row">
                             <div class="col-md-7">
@@ -30,37 +31,48 @@
                                     <label for="name" class="col-lg-3 col-form-label">Tên món</label>
                                     <div class="col-lg-9">
                                         <input id="name" name="name" type="text" class="form-control"
-                                            value="{{ $food->name }}" required>
+                                            value="{{ isset($food->name) ? $food->name : '' }}" required>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="price" class="col-lg-3 col-form-label">Giá</label>
                                     <div class="col-lg-9">
                                         <input id="price" name="price" type="text" class="form-control"
-                                            value="{{ $food->price }}" required>
+                                            value="{{ isset($food->price) ? $food->price : '' }}" required>
                                     </div>
                                 </div>
-                                <!-- <div class="form-group row">
-                                    <label for="txtAddress1Billing" class="col-lg-3 col-form-label">Mô tả</label>
+                                <div class="form-group row">
+                                    <label for="description" class="col-lg-3 col-form-label">Mô tả</label>
                                     <div class="col-lg-9">
-                                        <textarea id="txtAddress1Billing" name="txtAddress1Billing" rows="4" class="form-control">
-                                        </textarea>
+                                        <textarea id="description" name="description" rows="4" class="form-control">{{ isset($food->description) ? $food->description : '' }}</textarea>
                                     </div>
-                                </div> -->
+                                </div>
                                 <div class="form-group row">
                                     <label for="" class="col-lg-3 col-form-label">Cửa hàng</label>
                                     <div class="col-lg-9">
                                         <select id="shop_id" name="shop_id" class="form-control" required>
                                             <option value="">-- Hãy chọn cửa hàng --</option>
-                                            <option value="1">1</option>
-                                            <option value="2">2</option>
+                                            @foreach ($shops as $shop)
+                                                <option value="{{ $shop->id }}" {{ isset($food->shop_id) ? $shop->id == $food->shop_id ? 'selected' : '' : '' }}>{{ $shop->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="" class="col-lg-3 col-form-label">Danh mục</label>
+                                    <div class="col-lg-9">
+                                        <select id="category_id" name="category_id" class="form-control" required>
+                                            <option value="">-- Hãy chọn danh mục --</option>
+                                            @foreach ($categories as $category)
+                                                <option value="{{ $category->id }}" {{ isset($food->category_id) ? $category->id == $food->category_id ? 'selected' : '' : '' }}>{{ $category->name }}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
 
                                 <br>
                                 <div class="col-md-12 text-center m-t-15">
-                                    <button type="submit" class="btn btn-primary waves-effect waves-light">Lưu thay đổi</button>
+                                    <button type="submit" class="btn btn-primary waves-effect waves-light">Xác nhận</button>
                                 </div>
                             </div>
 
@@ -84,7 +96,7 @@
                                                             id="photoThumbnail" alt="Preview Thumbnail">
                                                     @endif
                                                     <div class="fallback">
-                                                        <input name="images" type="file" id="photo" multiple="multiple" required>
+                                                        <input name="images" type="file" id="photo" multiple="multiple" {{ isset($food) ? '' : 'required' }} />
                                                     </div>
                                                 </div>
                                             </div>

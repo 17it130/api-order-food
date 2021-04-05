@@ -35,4 +35,11 @@ class FoodRepository implements FoodRepositoryInterface {
     {
         return Food::where('category_id', $cat_id)->get();
     }
+
+    public function getFoodWithCategoryShop() {
+        return Food::join('users', 'users.id', 'foods.shop_id')
+                ->join('categories', 'foods.category_id', 'categories.id')
+                ->select('foods.*', 'users.name as shop_name', 'categories.name as category_name')
+                ->get();
+    }
 }

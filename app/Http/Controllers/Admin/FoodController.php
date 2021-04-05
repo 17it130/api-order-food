@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Services\FoodService;
+use App\Services\UserService;
+use App\Services\CategoryService;
 use Illuminate\Http\Request;
 use PHPUnit\Exception;
 
@@ -15,25 +17,83 @@ class FoodController extends Controller
 {
     protected $foodService;
 
-    public function __construct(FoodService $foodService) {
+    public function __construct(FoodService $foodService, UserService $userService, CategoryService $categoryService) {
         $this->foodService = $foodService;
+        $this->userService = $userService;
+        $this->categoryService = $categoryService;
     }
 
-    public function getAll() {
-        $foods = $this->foodService->getAll();
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index() {
+        $foods = $this->foodService->getFoodWithCategoryShop();
 
         return view('admin.pages.food.index', compact('foods'));
     }
 
-    public function show($id) {
-        $food = $this->foodService->show($id);
-        $category = 1;
-
-        return view('admin.pages.food.createOrUpdate', compact('food', 'category'));
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        $categories = $this->categoryService->getAll();
+        $shops = $this->userService->getAll();
+        return view('admin.pages.food.createOrUpdate', compact('categories', 'shops'));
     }
 
-    public function update(Request $request) {
-        $food_old = $this->foodService->show($request->id);
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $file = $request->file('images');
+        $path = Storage::disk('public')->put('foods',$file);
+
+        $data = [
+            'name' => $request->input('name'),
+            'images' => "/storage/".$path,
+            'price' => $request->input('price'),
+            'description' => $request->input('description'),
+            'shop_id' => $request->input('shop_id'),
+            'category_id' => $request->input('category_id')
+        ];
+
+        $this->foodService->store($data);
+
+        return redirect()->route('food.index');
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id) {
+        $food = $this->foodService->show($id);
+        $categories = $this->categoryService->getAll();
+        $shops = $this->userService->getAll();
+
+        return view('admin.pages.food.createOrUpdate', compact('food', 'shops', 'categories'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id) {
+        $food_old = $this->foodService->show($id);
 
         if($request->has('images')) {
             $oldImage = str_replace('/storage', '', $food_old->images);
@@ -43,6 +103,8 @@ class FoodController extends Controller
             $file = $request->file('images');
             $path = Storage::disk('public')->put('foods',$file);
             $food_data['images'] = "/storage/".$path;
+        } else {
+            $food_data['images'] = $food_old->images;
         }
         
         if($request->has('name')) {
@@ -50,6 +112,9 @@ class FoodController extends Controller
         }
         if($request->has('price')) {
             $food_data['price'] = $request->price;
+        }
+        if($request->has('description')) {
+            $food_data['description'] = $request->description;
         }
         if($request->has('rating')) {
             $food_data['rating'] = $request->rating;
@@ -59,9 +124,25 @@ class FoodController extends Controller
         if($request->has('shop_id')) {
             $food_data['shop_id'] = $request->shop_id;
         }
+        if($request->has('category_id')) {
+            $food_data['category_id'] = $request->category_id;
+        }
 
-        $this->foodService->update($food_data, $request->id);
+        $this->foodService->update($food_data, $id);
 
         return redirect()->back()->with('edit', true);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        $this->foodService->delete($id);
+
+        return response()->json(true);
     }
 }

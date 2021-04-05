@@ -11,6 +11,14 @@ class UserService {
         $this->userRepository = $userRepository;
     }
 
+    public function getAll() {
+        return $this->userRepository->getAll();
+    }
+
+    public function getUsersByRole($role) {
+        return $this->userRepository->getUsersByRole($role);
+    }
+
     public function store($data) {
         return $this->userRepository->store($data);
     }
