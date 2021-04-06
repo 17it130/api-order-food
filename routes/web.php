@@ -17,14 +17,17 @@ use App\Http\Controllers\Admin\FoodController;
 |
 */
 
-Route::get('/login', [AuthController::class, 'index'])->name('auth.index')->middleware('guest');
-Route::get('/google', [AuthController::class, 'redirectToGoogle'])->name('auth.gRedirect');
-Route::get('/google/callback', [AuthController::class, 'handleGoogleCallback']);
+Route::group(['middleware' => 'web'], function () {
+    Route::get('/login', [AuthController::class, 'index'])->name('auth.index')->middleware('guest');
+    Route::get('/google', [AuthController::class, 'redirectToGoogle'])->name('auth.gRedirect');
+    Route::get('/google/callback', [AuthController::class, 'handleGoogleCallback']);
 
-Route::group(['prefix' => 'admin', 'middleware' => ['isAuth', 'revalidate']], function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
-    Route::resource('/category', CategoryController::class);
-    Route::resource('/food', FoodController::class);
-    Route::resource('/category', CategoryController::class);
-    Route::resource('/food', FoodController::class);
+    Route::group(['prefix' => 'admin', 'middleware' => ['isAuth', 'revalidate']], function () {
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
+        Route::resource('/category', CategoryController::class);
+        Route::resource('/food', FoodController::class);
+        Route::resource('/category', CategoryController::class);
+        Route::resource('/food', FoodController::class);
+        Route::get('/logout', [AuthController::class, 'logout'])->name('auth.logout');
+    });
 });

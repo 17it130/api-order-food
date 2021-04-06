@@ -11,7 +11,8 @@ class SocialAccount extends Model
 
     protected $fillable = ['user_id', 'social_id', 'social_provider'];
 
-    public function user() {
-        return $this->belongsToMany(User::class, 'user_id');
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

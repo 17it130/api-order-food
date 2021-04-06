@@ -2,7 +2,6 @@
 @section('title', isset($food) ? 'Chỉnh sửa món ăn' : 'Thêm mới món ăn')
 
 @push('css')
-    <link href="{{ asset('admin/flags/css/flag-icon.min.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('admin/assets/plugins/jquery-steps/jquery.steps.css') }}">
 @endpush
 
@@ -115,22 +114,7 @@
 @endsection
 
 @push('js')
-    <!-- Page JS Plugins -->
-    <script src="{{ asset('admin/assets/plugins/bootstrap-notify/bootstrap-notify.min.js') }}"></script>
-    <!-- Page JS Helpers (BS Notify Plugin) -->
     <script>
-        jQuery(function () {
-            Dashmix.helpers('notify');
-        });
-    </script>
-
-    <script>
-        $(document).ready(function () {
-            @if(Session::has('edit'))
-                Dashmix.helpers('notify', {type: 'success', icon: 'fa fa-check mr-1', message: 'Chỉnh sửa thành công!'});
-            @endif
-        });
-
         function previewImage(input, element) {
             if (input.files && input.files[0]) {
                 var reader = new FileReader();

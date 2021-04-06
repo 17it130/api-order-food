@@ -7,7 +7,7 @@
             <ul class="metismenu" id="side-menu">
                 <li class="menu-title">Main</li>
                 <li>
-                    <a href="{{ route('dashboard') }}" class="waves-effect">
+                    <a href="{{ route('dashboard.index') }}" class="waves-effect">
                         <i class="ti-home"></i><span class="badge badge-primary badge-pill float-right">2</span> <span> Dashboard </span>
                     </a>
                 </li>

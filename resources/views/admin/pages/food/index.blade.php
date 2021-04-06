@@ -42,7 +42,7 @@
                                 <td>{{ $loop->index+1 }}</td>
                                 <td>{{ $food->name }}</td>
                                 <td class="text-center">
-                                    <img src="{{ asset($food->images) }}" alt="{{ $food->images }}" style="max-height: 100px"/>
+                                    <img src="{{ asset($food->images) }}" alt="Image" style="max-height: 100px"/>
                                 </td>
                                 <td>{{ $food->price }}</td>
                                 <td>{{ $food->rating }}</td>

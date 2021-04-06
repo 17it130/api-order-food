@@ -19,7 +19,7 @@ class AuthMiddleware
     {
         if (Auth::check()) {
             $user = Auth::user();
-            if ($user->user->role == 'shop' || $user->user->role == 'admin') {
+            if ($user->role == 'shop' || $user->role == 'admin') {
                 return $next($request);
             }
         } else {

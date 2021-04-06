@@ -17,7 +17,8 @@ class FoodController extends Controller
 {
     protected $foodService;
 
-    public function __construct(FoodService $foodService, UserService $userService, CategoryService $categoryService) {
+    public function __construct(FoodService $foodService, UserService $userService, CategoryService $categoryService)
+    {
         $this->foodService = $foodService;
         $this->userService = $userService;
         $this->categoryService = $categoryService;
@@ -28,7 +29,8 @@ class FoodController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index() {
+    public function index()
+    {
         $foods = $this->foodService->getFoodWithCategoryShop();
 
         return view('admin.pages.food.index', compact('foods'));
@@ -55,11 +57,11 @@ class FoodController extends Controller
     public function store(Request $request)
     {
         $file = $request->file('images');
-        $path = Storage::disk('public')->put('foods',$file);
+        $path = Storage::disk('public')->put('foods', $file);
 
         $data = [
             'name' => $request->input('name'),
-            'images' => "/storage/".$path,
+            'images' => url("/storage/" . $path),
             'price' => $request->input('price'),
             'description' => $request->input('description'),
             'shop_id' => $request->input('shop_id'),
@@ -77,10 +79,11 @@ class FoodController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id) {
+    public function edit($id)
+    {
         $food = $this->foodService->show($id);
         $categories = $this->categoryService->getAll();
-        $shops = $this->userService->getAll();
+        $shops = $this->userService->getUsersByRole('shop');
 
         return view('admin.pages.food.createOrUpdate', compact('food', 'shops', 'categories'));
     }
@@ -92,39 +95,40 @@ class FoodController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id) {
+    public function update(Request $request, $id)
+    {
         $food_old = $this->foodService->show($id);
 
-        if($request->has('images')) {
+        if ($request->has('images')) {
             $oldImage = str_replace('/storage', '', $food_old->images);
-            if(Storage::disk('public')->exists($oldImage)) {
+            if (Storage::disk('public')->exists($oldImage)) {
                 Storage::disk('public')->delete($oldImage);
             }
             $file = $request->file('images');
-            $path = Storage::disk('public')->put('foods',$file);
-            $food_data['images'] = "/storage/".$path;
+            $path = Storage::disk('public')->put('foods', $file);
+            $food_data['images'] = url("/storage/" . $path);
         } else {
             $food_data['images'] = $food_old->images;
         }
-        
-        if($request->has('name')) {
+
+        if ($request->has('name')) {
             $food_data['name'] = $request->name;
         }
-        if($request->has('price')) {
+        if ($request->has('price')) {
             $food_data['price'] = $request->price;
         }
-        if($request->has('description')) {
+        if ($request->has('description')) {
             $food_data['description'] = $request->description;
         }
-        if($request->has('rating')) {
+        if ($request->has('rating')) {
             $food_data['rating'] = $request->rating;
         } else {
             $food_data['rating'] = $food_old->rating;
         }
-        if($request->has('shop_id')) {
+        if ($request->has('shop_id')) {
             $food_data['shop_id'] = $request->shop_id;
         }
-        if($request->has('category_id')) {
+        if ($request->has('category_id')) {
             $food_data['category_id'] = $request->category_id;
         }
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Services\SocialService;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
 
 class AuthController extends Controller
@@ -34,10 +35,18 @@ class AuthController extends Controller
 
         if (isset($user) && $user != null) {
             if ($user->user->role == 'shop' || $user->user->role == 'admin') {
+                Auth::login($user->user);
                 return redirect()->route('dashboard.index');
+            } else {
+                abort(401);
             }
         } else {
             abort(401);
         }
+    }
+
+    public function logout()
+    {
+        Auth::logout();
     }
 }
