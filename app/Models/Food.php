@@ -10,6 +10,8 @@ class Food extends Model
     use HasFactory;
     protected $table = "foods";
 
+    protected $fillable = ['name', 'images', 'price', 'description', 'rating', 'shop_id', 'category_id'];
+
     public function order_detail() {
         return $this->hasOne(OrderDetail::class);
     }

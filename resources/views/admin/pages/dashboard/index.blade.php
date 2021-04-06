@@ -104,5 +104,7 @@
 @endsection
 
 @push('js')
-    <!--  -->
+    <!-- peity JS -->
+    <script src="{{ asset('admin/assets/plugins/peity-chart/jquery.peity.min.js') }}"></script>
+    <script src="{{ asset('admin/assets/pages/dashboard.js') }}"></script>
 @endpush

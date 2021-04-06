@@ -42,4 +42,8 @@ class FoodService
     {
         return $this->foodRepository->getFoodByCategoryId($cat_id);
     }
+
+    public function getFoodWithCategoryShop() {
+        return $this->foodRepository->getFoodWithCategoryShop();
+    }
 }

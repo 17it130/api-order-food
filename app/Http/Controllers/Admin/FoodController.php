@@ -3,20 +3,35 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Food;
+use App\Services\FoodService;
+use App\Services\UserService;
+use App\Services\CategoryService;
 use Illuminate\Http\Request;
+use PHPUnit\Exception;
+
+use App\Http\Requests\FoodRequest;
+use App\Models\Food;
+use Illuminate\Support\Facades\Storage;
 
 class FoodController extends Controller
 {
+    protected $foodService;
+
+    public function __construct(FoodService $foodService, UserService $userService, CategoryService $categoryService) {
+        $this->foodService = $foodService;
+        $this->userService = $userService;
+        $this->categoryService = $categoryService;
+    }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index() {
-        $foods = Food::all();
+        $foods = $this->foodService->getFoodWithCategoryShop();
 
-        return view('admin.pages.food.index');
+        return view('admin.pages.food.index', compact('foods'));
     }
 
     /**
@@ -26,11 +41,9 @@ class FoodController extends Controller
      */
     public function create()
     {
-        $categories = Category::where('status', 1)
-            ->where('type', '<>', 4)
-            ->get();
-
-        return view('admin.pages.category.createOrUpdate', compact('categories'));
+        $categories = $this->categoryService->getAll();
+        $shops = $this->userService->getAll();
+        return view('admin.pages.food.createOrUpdate', compact('categories', 'shops'));
     }
 
     /**
@@ -39,22 +52,23 @@ class FoodController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CategoryRequest $request)
+    public function store(Request $request)
     {
-        $category_data = $this->handleFormRequest($request);
-        Category::create($category_data);
+        $file = $request->file('images');
+        $path = Storage::disk('public')->put('foods',$file);
 
-        return redirect()->route('danh-muc.index')->with('add', true);
-    }
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
+        $data = [
+            'name' => $request->input('name'),
+            'images' => "/storage/".$path,
+            'price' => $request->input('price'),
+            'description' => $request->input('description'),
+            'shop_id' => $request->input('shop_id'),
+            'category_id' => $request->input('category_id')
+        ];
+
+        $this->foodService->store($data);
+
+        return redirect()->route('food.index');
     }
 
     /**
@@ -63,11 +77,12 @@ class FoodController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
-        $category = Food::findOrFail($id);
+    public function edit($id) {
+        $food = $this->foodService->show($id);
+        $categories = $this->categoryService->getAll();
+        $shops = $this->userService->getAll();
 
-        return view('admin.pages.food.createOrUpdate', compact('category'));
+        return view('admin.pages.food.createOrUpdate', compact('food', 'shops', 'categories'));
     }
 
     /**
@@ -77,12 +92,43 @@ class FoodController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(CategoryRequest $request, $id)
-    {
-        $category = Category::findOrFail($id);
+    public function update(Request $request, $id) {
+        $food_old = $this->foodService->show($id);
 
-        $category_data = $this->handleFormRequest($request);
-        $category->update($category_data);
+        if($request->has('images')) {
+            $oldImage = str_replace('/storage', '', $food_old->images);
+            if(Storage::disk('public')->exists($oldImage)) {
+                Storage::disk('public')->delete($oldImage);
+            }
+            $file = $request->file('images');
+            $path = Storage::disk('public')->put('foods',$file);
+            $food_data['images'] = "/storage/".$path;
+        } else {
+            $food_data['images'] = $food_old->images;
+        }
+        
+        if($request->has('name')) {
+            $food_data['name'] = $request->name;
+        }
+        if($request->has('price')) {
+            $food_data['price'] = $request->price;
+        }
+        if($request->has('description')) {
+            $food_data['description'] = $request->description;
+        }
+        if($request->has('rating')) {
+            $food_data['rating'] = $request->rating;
+        } else {
+            $food_data['rating'] = $food_old->rating;
+        }
+        if($request->has('shop_id')) {
+            $food_data['shop_id'] = $request->shop_id;
+        }
+        if($request->has('category_id')) {
+            $food_data['category_id'] = $request->category_id;
+        }
+
+        $this->foodService->update($food_data, $id);
 
         return redirect()->back()->with('edit', true);
     }
@@ -95,31 +141,8 @@ class FoodController extends Controller
      */
     public function destroy($id)
     {
-        Category::findOrFail($id)->delete();
+        $this->foodService->delete($id);
 
         return response()->json(true);
-    }
-
-    public function handleFormRequest(Request  $request, $category_data = []) {
-        if ($request->input('parent_id')) {
-            $category_data['parent_id'] = $request->input('parent_id');
-        }
-        if ($request->input('type')) {
-            $category_data['type'] = $request->input('type');
-        }
-        if ($request->input('category')) {
-            $category_data['vi'] = [
-                'category' => $request->input('category'),
-                'slug' => Str::slug($request->input('category'))
-            ];
-        }
-        if ($request->input('category_en')) {
-            $category_data['en'] = [
-                'category' => $request->input('category_en'),
-                'slug' => Str::slug($request->input('category_en'))
-            ];
-        }
-
-        return $category_data;
     }
 }

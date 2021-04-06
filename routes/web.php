@@ -23,6 +23,8 @@ Route::get('/google/callback', [AuthController::class, 'handleGoogleCallback']);
 
 Route::group(['prefix' => 'admin', 'middleware' => ['isAuth', 'revalidate']], function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
+    Route::resource('/category', CategoryController::class);
     Route::resource('/food', FoodController::class);
     Route::resource('/category', CategoryController::class);
+    Route::resource('/food', FoodController::class);
 });

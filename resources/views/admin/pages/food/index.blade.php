@@ -2,7 +2,8 @@
 @section('title', 'Quản lý món ăn')
 
 @push('css')
-    
+    <!-- Sweet Alert -->
+    <link href="{{ asset('admin/assets/plugins/sweet-alert2/sweetalert2.min.css') }}" rel="stylesheet" type="text/css">
 @endpush
 
 @section('content')
@@ -12,8 +13,14 @@
         <div class="card">
             <div class="card-body">
 
-                <h4 class="mt-0 header-title">Danh sách các món ăn</h4>
-                <p class="text-muted m-b-30">Order Food</p>
+                <h4 class="mt-0 header-title">Danh sách các món ăn</h4><br>
+                <div class="float-right d-none d-md-block">
+                    <div class="dropdown">
+                        <a class="btn btn-primary waves-effect waves-light" href="{{ route('food.create') }}">
+                            <i class="mdi mdi-pencil-outline mr-2"></i> Thêm mới món ăn
+                        </a>
+                    </div>
+                </div>
 
                 <table id="datatable" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                     <thead>
@@ -21,49 +28,38 @@
                             <th>#</th>
                             <th>Tên</th>
                             <th>Ảnh</th>
-                            <th>Mô tả</th>
-                            <th>Gía</th>
+                            <th>Giá</th>
                             <th>Đánh giá</th>
                             <th>Cửa hàng</th>
+                            <th>Danh mục</th>
                             <th>Thao tác</th>
                         </tr>
                     </thead>
 
                     <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>System Architect</td>
-                            <td>Edinburgh</td>
-                            <td>61</td>
-                            <td>2011/04/25</td>
-                            <td>$320,800</td>
-                            <td>2011/04/25</td>
-                            <td class="text-center">
-                                <a href="" class="btn btn-sm btn-primary js-tooltip-enabled" data-toggle="tooltip" title="Chỉnh sửa" data-original-title="Chỉnh sửa">
-                                    <i class="fa fa-pencil-alt"></i>
-                                </a>
-                                <button type="button" onclick="" class="btn btn-sm btn-danger js-tooltip-enabled" data-toggle="tooltip" title="Xóa" data-original-title="Xóa">
-                                    <i class="fa fa-times"></i>
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>System Architect</td>
-                            <td>Edinburgh</td>
-                            <td>50</td>
-                            <td>2011/04/25</td>
-                            <td>$320,800</td>
-                            <td>2011/04/25</td>
-                            <td class="text-center">
-                                <a href="" class="btn btn-sm btn-primary js-tooltip-enabled" data-toggle="tooltip" title="Chỉnh sửa" data-original-title="Chỉnh sửa">
-                                    <i class="fa fa-pencil-alt"></i>
-                                </a>
-                                <button type="button" onclick="" class="btn btn-sm btn-danger js-tooltip-enabled" data-toggle="tooltip" title="Xóa" data-original-title="Xóa">
-                                    <i class="fa fa-times"></i>
-                                </button>
-                            </td>
-                        </tr>
+                        @foreach($foods as $food)
+                            <tr>
+                                <td>{{ $loop->index+1 }}</td>
+                                <td>{{ $food->name }}</td>
+                                <td class="text-center">
+                                    <img src="{{ asset($food->images) }}" alt="{{ $food->images }}" style="max-height: 100px"/>
+                                </td>
+                                <td>{{ $food->price }}</td>
+                                <td>{{ $food->rating }}</td>
+                                <td>{{ $food->shop_name }}</td>
+                                <td>{{ $food->category_name }}</td>
+                                <td class="text-center">
+                                    <a href="{{ route('food.edit', $food->id) }}" class="btn btn-warning btn-sm waves-effect waves-light">
+                                        <i class="fa fa-pencil-alt"></i>
+                                    </a>
+                                    <a class="btn btn-danger btn-sm waves-effect waves-light"
+                                        onclick="deleteFood({{ $food->id }})" href="javascript:void(0);"
+                                        role="button">
+                                        <i class="mdi mdi-trash-can-outline"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        @endforeach
                     </tbody>
                 </table>
 
@@ -75,5 +71,76 @@
 @endsection
 
 @push('js')
-    
+    <!-- Required datatable js -->
+    <script src="{{ asset('admin/assets/plugins/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('admin/assets/plugins/datatables/dataTables.bootstrap4.min.js') }}"></script>
+    <!-- Buttons examples -->
+    <script src="{{ asset('admin/assets/plugins/datatables/dataTables.buttons.min.js') }}"></script>
+    <script src="{{ asset('admin/assets/plugins/datatables/buttons.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('admin/assets/plugins/datatables/jszip.min.js') }}"></script>
+    <script src="{{ asset('admin/assets/plugins/datatables/pdfmake.min.js') }}"></script>
+    <script src="{{ asset('admin/assets/plugins/datatables/vfs_fonts.js') }}"></script>
+    <script src="{{ asset('admin/assets/plugins/datatables/buttons.html5.min.js') }}"></script>
+    <script src="{{ asset('admin/assets/plugins/datatables/buttons.print.min.js') }}"></script>
+    <script src="{{ asset('admin/assets/plugins/datatables/buttons.colVis.min.js') }}"></script>
+    <!-- Responsive examples -->
+    <script src="{{ asset('admin/assets/plugins/datatables/dataTables.responsive.min.js') }}"></script>
+    <script src="{{ asset('admin/assets/plugins/datatables/responsive.bootstrap4.min.js') }}"></script>
+
+    <!-- Datatable init js -->
+    <script src="{{ asset('admin/assets/pages/datatables.init.js') }}"></script>
+    <!-- Sweet-Alert  -->
+<script src="{{ asset('admin/assets/plugins/sweet-alert2/sweetalert2.min.js') }}"></script>
+<script>
+    function deleteFood(id) {
+        const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+                confirmButton: 'btn btn-success',
+                cancelButton: 'btn btn-danger mr-2'
+            },
+            buttonsStyling: false,
+        });
+        swalWithBootstrapButtons.fire({
+            title: 'Bạn có chắc chắn?',
+            text: "Món ăn này sẽ bị xóa!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Xóa',
+            cancelButtonText: 'Hủy',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.value) {
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+                $.ajax({
+                    type: 'DELETE',
+                    url: '{{ url('admin/food') }}/' + id,
+                    data: {
+                        id: id,
+                    },
+                    dataType: 'json',
+                    success: function(data) {
+                        if(data) {
+                            swalWithBootstrapButtons.fire(
+                                'Thành công!',
+                                'Món ăn đã xóa thành công!',
+                                'success',
+                            )
+                        }
+                        window.location.reload();
+                    }
+                })
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                swalWithBootstrapButtons.fire(
+                    'Hủy',
+                    'Hủy thành công !',
+                    'error'
+                )
+            }
+        })
+    }
+</script>
 @endpush
