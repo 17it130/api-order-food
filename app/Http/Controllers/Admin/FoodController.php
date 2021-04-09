@@ -80,7 +80,7 @@ class FoodController extends Controller
     public function edit($id) {
         $food = $this->foodService->show($id);
         $categories = $this->categoryService->getAll();
-        $shops = $this->userService->getAll();
+        $shops = $this->userService->getUsersByRole('shop');
 
         return view('admin.pages.food.createOrUpdate', compact('food', 'shops', 'categories'));
     }
