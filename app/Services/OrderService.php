@@ -18,6 +18,10 @@ class OrderService
         return $this->orderRepository->getAll();
     }
 
+    public function getAllWithUser() {
+        return $this->orderRepository->getAllWithUser();
+    }
+
     public function show($id) {
         return $this->orderRepository->show($id);
     }

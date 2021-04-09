@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\FoodController;
+use App\Http\Controllers\Admin\OrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,9 +21,7 @@ use App\Http\Controllers\Admin\FoodController;
 Route::prefix('admin')->group(function() {
     Route::get('/login', [AuthController::class, 'index'])->name('auth.index')->middleware('guest');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    // Route::get('/food', [FoodController::class, 'index'])->name('food.index');
-    // Route::get('/food/{id}', [FoodController::class, 'edit'])->name('food.edit');
-    // Route::post('/food/{id}', [FoodController::class, 'update'])->name('food.update');
     Route::resource('/category', CategoryController::class);
     Route::resource('/food', FoodController::class);
+    Route::resource('/order', OrderController::class);
 });
