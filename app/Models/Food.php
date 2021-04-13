@@ -12,11 +12,18 @@ class Food extends Model
 
     protected $fillable = ['name', 'images', 'price', 'description', 'rating', 'shop_id', 'category_id'];
 
-    public function order_detail() {
+    public function order_detail()
+    {
         return $this->hasOne(OrderDetail::class);
     }
 
-    public function category() {
+    public function category()
+    {
         return $this->belongsTo(Category::class);
+    }
+
+    public function shop()
+    {
+        return $this->belongsTo(User::class);
     }
 }

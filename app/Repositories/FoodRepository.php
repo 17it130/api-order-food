@@ -4,11 +4,12 @@ namespace App\Repositories;
 
 use App\Models\Food;
 
-class FoodRepository implements FoodRepositoryInterface {
+class FoodRepository implements FoodRepositoryInterface
+{
 
     public function getAll()
     {
-        return Food::all();
+        return Food::with('shop')->get();
     }
 
     public function store($data)
@@ -18,7 +19,7 @@ class FoodRepository implements FoodRepositoryInterface {
 
     public function show($id)
     {
-        return Food::findOrFail($id);
+        return Food::with('shop')->findOrFail($id);
     }
 
     public function update($data, $id)
@@ -28,18 +29,19 @@ class FoodRepository implements FoodRepositoryInterface {
 
     public function delete($id)
     {
-       return Food::findOrFail($id)->delete();
+        return Food::findOrFail($id)->delete();
     }
 
     public function getFoodByCategoryId($cat_id)
     {
-        return Food::where('category_id', $cat_id)->get();
+        return Food::with('shop')->where('category_id', $cat_id)->get();
     }
 
-    public function getFoodWithCategoryShop() {
+    public function getFoodWithCategoryShop()
+    {
         return Food::join('users', 'users.id', 'foods.shop_id')
-                ->join('categories', 'foods.category_id', 'categories.id')
-                ->select('foods.*', 'users.name as shop_name', 'categories.name as category_name')
-                ->get();
+            ->join('categories', 'foods.category_id', 'categories.id')
+            ->select('foods.*', 'users.name as shop_name', 'categories.name as category_name')
+            ->get();
     }
 }

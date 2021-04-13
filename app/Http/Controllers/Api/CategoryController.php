@@ -21,10 +21,12 @@ class CategoryController extends Controller
 
     public function getAll()
     {
+        $categories = $this->categoryService->getAll()->toArray();
+        array_unshift($categories, ['id' => 0, 'name' => 'All']);
         try {
             $result = [
                 'status' => 1,
-                'categories' => $this->categoryService->getAll()
+                'categories' => $categories
             ];
         } catch (Exception $e) {
             $result = [
@@ -41,7 +43,7 @@ class CategoryController extends Controller
         try {
             $result = [
                 'status' => 1,
-                'food' => $this->foodService->getFoodByCategoryId($id)
+                'foods' => $this->foodService->getFoodByCategoryId($id)
             ];
         } catch (Exception $e) {
             $result = [
