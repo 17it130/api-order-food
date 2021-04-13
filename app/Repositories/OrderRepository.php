@@ -17,6 +17,17 @@ class OrderRepository implements OrderRepositoryInterface {
                     ->get();
     }
 
+    public function getAllWithUser()
+    {
+        return Order::with(['detail' => function($q) {
+                        $q->with('food');
+                    }])
+                    ->join('users', 'orders.customer_id', 'users.id')
+                    ->select('orders.*', 'users.name as customer_name', 'users.email as customer_email',
+                                'users.phone as customer_phone', 'users.address as customer_address')
+                    ->get();
+    }
+
     public function show($id)
     {
         return Order::with(['detail' => function($q) {

@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\FoodController;
+use App\Http\Controllers\Admin\OrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,6 +29,7 @@ Route::group(['middleware' => 'web'], function () {
         Route::resource('/food', FoodController::class);
         Route::resource('/category', CategoryController::class);
         Route::resource('/food', FoodController::class);
+        Route::resource('/order', OrderController::class);
         Route::get('/logout', [AuthController::class, 'logout'])->name('auth.logout');
     });
 });

@@ -21,6 +21,10 @@
                 </li>
 
                 <li>
+                    <a href="{{ route('order.index') }}" class="waves-effect"><i class="ti-clipboard"></i><span> Quản lý đặt hàng </span></a>
+                </li>
+
+                <li>
                     <a href="calendar.html" class="waves-effect"><i class="ti-calendar"></i><span> Calendar </span></a>
                 </li>
 
