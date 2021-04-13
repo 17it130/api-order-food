@@ -22,7 +22,8 @@ class User extends Authenticatable implements JWTSubject
         'email',
         'profile_image',
         'role',
-        'phone'
+        'phone',
+        'public_name'
     ];
 
     public function getJWTIdentifier()
@@ -54,15 +55,18 @@ class User extends Authenticatable implements JWTSubject
         'email_verified_at' => 'datetime',
     ];
 
-    public function social() {
+    public function social()
+    {
         return $this->hasMany(SocialAccount::class);
     }
 
-    public function order() {
+    public function order()
+    {
         return $this->hasMany(Order::class, 'customer_id');
     }
 
-    public function notification() {
+    public function notification()
+    {
         return $this->hasMany(Notification::class);
     }
 }

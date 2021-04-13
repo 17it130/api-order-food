@@ -3,12 +3,15 @@
 namespace App\Repositories;
 
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
-class UserRepository implements UserRepositoryInterface {
+class UserRepository implements UserRepositoryInterface
+{
 
     public function getAll()
     {
-        return User::all();
+        return User::where('id', '<>', Auth::user()->id)
+            ->get();
     }
 
     public function getUsersByRole($role)
@@ -19,7 +22,7 @@ class UserRepository implements UserRepositoryInterface {
     public function show($id)
     {
         return User::with('order')
-                    ->findOrFail($id);
+            ->findOrFail($id);
     }
 
     public function update($data, $id)

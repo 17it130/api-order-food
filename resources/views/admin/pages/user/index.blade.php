@@ -13,46 +13,33 @@
         <div class="card">
             <div class="card-body">
 
-                <h4 class="mt-0 header-title">Danh sách các hóa đơn</h4><br>
-                <!-- <div class="float-right d-none d-md-block">
-                    <div class="dropdown">
-                        <a class="btn btn-primary waves-effect waves-light" href="{{ route('food.create') }}">
-                            <i class="mdi mdi-pencil-outline mr-2"></i> Thêm mới hóa đơn
-                        </a>
-                    </div>
-                </div> -->
+                <h4 class="mt-0 header-title">Danh sách người dùng</h4><br>
 
                 <table id="datatable" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Tên khách hàng</th>
+                            <th>Tên người dùng</th>
                             <th>Số điện thoại</th>
-                            <th>Tổng thanh toán</th>
-                            <th>Ngày đặt</th>
-                            <th>Phương thức thanh toán</th>
-                            <th>Trạng thái</th>
-                            <th>Xem chi tiết</th>
+                            <th>Email</th>
+                            <th>Quyền</th>
+                            <th>Thao tác</th>
                         </tr>
                     </thead>
 
                     <tbody>
-                        @foreach($orders as $order)
+                        @foreach($users as $key => $user)
                             <tr>
-                                <td>{{ $loop->index+1 }}</td>
-                                <td>{{ $order->customer_name }}</td>
-                                <td>{{ $order->customer_phone }}</td>
-                                <td>{{ $order->totalPrice }}</td>
-                                <td>{{ $order->order_date }}</td>
+                                <td>{{ $key + 1 }}</td>
+                                <td>{{ $user->name }}</td>
+                                <td>{{ $user->phone }}</td>
+                                <td>{{ $user->email }}</td>
                                 <td>
-                                    <span class="badge badge-primary">{{ $order->payment_id == 0 ? 'Thanh toán khi nhận hàng' : 'Thanh toán Online' }}</span>
-                                </td>
-                                <td>
-                                    <span class="badge badge-success">{{ $order->status == 0 ? 'Đang chờ xác nhận' : ($order->status == 1 ? 'Đã xác nhận' : ($order->status == 2 ? 'Đang giao' : 'Đã giao')) }}</span>
+                                    <span class="badge badge-primary" style="text-transform: uppercase">{{ $user->role }}</span>
                                 </td>
                                 <td class="text-center">
-                                    <a href="{{ route('order.edit', $order->id) }}" class="btn btn-primary btn-sm waves-effect waves-light">
-                                        Chi tiết đơn hàng
+                                    <a href="{{ route('user.edit', $user->id) }}" class="btn btn-primary btn-sm waves-effect waves-light">
+                                        Chỉnh sửa
                                     </a>
                                 </td>
                             </tr>
