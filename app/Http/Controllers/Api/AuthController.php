@@ -21,7 +21,14 @@ class AuthController extends Controller
 
     public function loginWithGoogle(Request $request)
     {
-        $client = new \Google_Client(['client_id' => '1086092518209-ftnve6v9u2v5fpundc1t9oc56r0gthhl.apps.googleusercontent.com']);
+        if ($request->device_type == 'web') {
+            $client_id_string = "1086092518209-ftnve6v9u2v5fpundc1t9oc56r0gthhl.apps.googleusercontent.com";
+        } else if ($request->device_type == 'ios') {
+            $client_id_string = "1086092518209-r4ntrumb2k85gldv78gfipbt2tnb9hp5.apps.googleusercontent.com";
+        } else if ($request->device_type == 'android') {
+            $client_id_string = "";
+        }
+        $client = new \Google_Client(['client_id' => $client_id_string]);
         $payload = $client->verifyIdToken($request->input('id_token'));
 
         if (isset($payload) && $payload) {
