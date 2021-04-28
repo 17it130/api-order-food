@@ -53,3 +53,10 @@ Route::prefix('food')->group(function () {
     Route::get('/', [FoodController::class, 'getAll']);
     Route::get('/{id}', [FoodController::class, 'show']);
 });
+
+Route::fallback(function () {
+    return response()->json(array(
+        'success' => false,
+        'message' => 'Page Not Found'
+    ), 404);
+});
