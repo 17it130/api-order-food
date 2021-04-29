@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Food;
+use Illuminate\Support\Facades\DB;
 
 class FoodRepository implements FoodRepositoryInterface
 {
@@ -17,9 +18,23 @@ class FoodRepository implements FoodRepositoryInterface
         return Food::create($data);
     }
 
-    public function show($id)
+    public function show($id, $data)
     {
-        return Food::with('shop')->findOrFail($id);
+        $sqlDistance = DB::raw('(111.045*acos(cos(radians(' . $data['latitude'] . '))
+       * cos(radians(users.latitude))
+       * cos(radians(users.longitude)
+       - radians(' . $data['longitude'] . '))
+       + sin( radians(' . $data['latitude'] . '))
+       * sin( radians(users.latitude))))');
+        return Food::with(['shop', 'tags', 'reviews' => function ($q) {
+            $q->sum('price')
+        }])
+            ->join('users', 'users.id', 'foods.shop_id')
+            ->select('users.latitude',
+                'users.longitude', 'foods.*')
+            ->selectRaw("{$sqlDistance} AS distance")
+            ->orderBy('distance')
+            ->get();
     }
 
     public function update($data, $id)
@@ -42,6 +57,21 @@ class FoodRepository implements FoodRepositoryInterface
         return Food::join('users', 'users.id', 'foods.shop_id')
             ->join('categories', 'foods.category_id', 'categories.id')
             ->select('foods.*', 'users.name as shop_name', 'categories.name as category_name')
+            ->get();
+    }
+
+    public function search($keyword)
+    {
+        return Food::query()
+            ->where("name", 'LIKE', "%{$keyword}%")
+            ->get();
+    }
+
+    public function recommendFood($food_id, $shop_id)
+    {
+        return Food::where("id", '<>', $food_id)
+            ->where("shop_id", $shop_id)
+            ->inRandomOrder(5)
             ->get();
     }
 }

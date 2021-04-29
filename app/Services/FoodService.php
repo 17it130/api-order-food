@@ -23,9 +23,9 @@ class FoodService
         return $this->foodRepository->store($data);
     }
 
-    public function show($id)
+    public function show($id, $data)
     {
-        return $this->foodRepository->show($id);
+        return $this->foodRepository->show($id, $data);
     }
 
     public function update($data, $id)
@@ -45,5 +45,13 @@ class FoodService
 
     public function getFoodWithCategoryShop() {
         return $this->foodRepository->getFoodWithCategoryShop();
+    }
+
+    public function search($keyword) {
+        return $this->foodRepository->search($keyword);
+    }
+
+    public function recommendFood($food_id, $shop_id) {
+        return $this->foodRepository->recommendFood($food_id, $shop_id);
     }
 }

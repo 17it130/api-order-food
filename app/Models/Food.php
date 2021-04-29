@@ -26,4 +26,30 @@ class Food extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function tags() {
+        return $this->belongsToMany(Tag::class);
+    }
+
+    public function reviews() {
+        return $this->belongsTo(Review::class);
+    }
+
+    public function getSumOfRating() {
+        return $this->reviews()->sum('rate');
+    }
+
+    public function createTags($str) {
+        $tagIds = [];
+
+        foreach ($str as $tag) {
+            $newTag = Tag::firstOrCreate([
+                'name' => ucwords(trim($tag))
+            ]);
+
+            $tagIds[] = $newTag->id;
+        }
+
+        $this->tags()->sync($tagIds);
+    }
 }
