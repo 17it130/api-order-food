@@ -33,6 +33,7 @@ class FoodRepository implements FoodRepositoryInterface
             ->join('users', 'users.id', 'foods.shop_id')
             ->select('users.latitude',
                 'users.longitude', 'foods.*')
+            ->where('foods.id', $id)
             ->selectRaw("{$sqlDistance} AS distance")
             ->orderBy('distance')
             ->get();
