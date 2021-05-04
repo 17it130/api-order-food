@@ -53,7 +53,7 @@ Route::prefix('food')->group(function () {
     Route::get('/search', [FoodController::class, 'search']);
     Route::get('/recommend/{id}/{shop_id}', [FoodController::class, 'recommendFood']);
     Route::get('/', [FoodController::class, 'getAll']);
-    Route::get('/{id}', [FoodController::class, 'show']);
+    Route::post('/{id}', [FoodController::class, 'show']);
 });
 
 Route::fallback(function () {
