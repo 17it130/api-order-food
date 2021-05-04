@@ -27,7 +27,8 @@ class FoodRepository implements FoodRepositoryInterface
        + sin( radians(' . $data['latitude'] . '))
        * sin( radians(users.latitude))))');
         return Food::with(['shop', 'tags', 'reviews' => function ($q) {
-            $q->sum('price')
+            $q->with('user')
+                ->selectRaw('sum(rate)');
         }])
             ->join('users', 'users.id', 'foods.shop_id')
             ->select('users.latitude',
