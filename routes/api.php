@@ -7,6 +7,8 @@ use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\NotificationController;
+use App\Http\Controllers\Api\PaymentController;
+use App\Http\Controllers\Api\ReviewController;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,6 +44,15 @@ Route::group(['middleware' => 'jwt'], function () {
         Route::put('/update/{id}', [OrderController::class, 'update']);
         Route::delete('/remove-item/{id}', [OrderController::class, 'removeItemInOrderDetail']);
     });
+
+    Route::prefix('review')->group(function () {
+        Route::post('/save', [ReviewController::class, 'store']);
+    });
+});
+
+Route::prefix('payment')->group(function () {
+    Route::get('/', [PaymentController::class, 'getAll']);
+    Route::get('/{id}', [PaymentController::class, 'show']);
 });
 
 Route::prefix('category')->group(function () {
@@ -54,6 +65,11 @@ Route::prefix('food')->group(function () {
     Route::get('/recommend/{id}/{shop_id}', [FoodController::class, 'recommendFood']);
     Route::get('/', [FoodController::class, 'getAll']);
     Route::post('/{id}', [FoodController::class, 'show']);
+});
+
+Route::prefix('review')->group(function () {
+    Route::get('/food/{food_id}', [ReviewController::class, 'getReviewByFoodId']);
+    Route::get('/shop/{food_id}', [ReviewController::class, 'getReviewByShop']);
 });
 
 Route::fallback(function () {

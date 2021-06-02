@@ -42,7 +42,7 @@
                         <!-- Page name -->
                         <div class="page-title-box">
                             <div class="row align-items-center">
-                                
+
                                 <div class="col-sm-6">
                                     <h4 class="page-title">@yield('title')</h4>
                                     <!-- <ol class="breadcrumb">
@@ -50,7 +50,7 @@
                                     </ol> -->
                                 </div>
                                 <!-- <div class="col-sm-6">
-                                
+
                                     <div class="float-right d-none d-md-block">
                                         <div class="dropdown">
                                             <button class="btn btn-primary dropdown-toggle arrow-none waves-effect waves-light" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -75,9 +75,7 @@
                     </div>
                 </div>
 
-                <footer class="footer">
-                    © 2021 Order Food <span class="d-none d-sm-inline-block"> - Crafted with <i class="mdi mdi-heart text-danger"></i> by We</span>.
-                </footer>
+                @include('admin.layouts.footer')
             </div>
 
             <!-- ============================================================== -->
@@ -100,7 +98,7 @@
 
         <!-- App js -->
         <script src="{{ asset('admin/assets/js/app.js') }}"></script>
-        
+
         @stack('js')
     </body>
 

@@ -10,7 +10,7 @@ class Food extends Model
     use HasFactory;
     protected $table = "foods";
 
-    protected $fillable = ['name', 'images', 'price', 'description', 'rating', 'shop_id', 'category_id'];
+    protected $fillable = ['name', 'images', 'price', 'description', 'shop_id', 'category_id'];
 
     public function order_detail()
     {
@@ -51,5 +51,9 @@ class Food extends Model
         }
 
         $this->tags()->sync($tagIds);
+    }
+
+    public function review() {
+        return $this->hasMany(Review::class, 'food_id');
     }
 }

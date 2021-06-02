@@ -81,7 +81,8 @@ class FoodController extends Controller
      */
     public function edit($id)
     {
-        $food = $this->foodService->show($id);
+        $food = $this->foodService->show($id, []);
+
         $categories = $this->categoryService->getAll();
         $shops = $this->userService->getUsersByRole('shop');
 
@@ -97,7 +98,7 @@ class FoodController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $food_old = $this->foodService->show($id);
+        $food_old = $this->foodService->show($id, []);
 
         if ($request->has('images')) {
             $oldImage = str_replace('/storage', '', $food_old->images);

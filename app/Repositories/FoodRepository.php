@@ -20,23 +20,29 @@ class FoodRepository implements FoodRepositoryInterface
 
     public function show($id, $data)
     {
-        $sqlDistance = DB::raw('(111.045*acos(cos(radians(' . $data['latitude'] . '))
-       * cos(radians(users.latitude))
-       * cos(radians(users.longitude)
-       - radians(' . $data['longitude'] . '))
-       + sin( radians(' . $data['latitude'] . '))
-       * sin( radians(users.latitude))))');
-        return Food::with(['shop', 'tags', 'reviews' => function ($q) {
-            $q->with('user')
-                ->selectRaw('sum(rate)');
-        }])
-            ->join('users', 'users.id', 'foods.shop_id')
-            ->select('users.latitude',
-                'users.longitude', 'foods.*')
-            ->where('foods.id', $id)
-            ->selectRaw("{$sqlDistance} AS distance")
-            ->orderBy('distance')
-            ->get();
+        if (isset($data['latitude']) && isset($data['longitude'])) {
+            $sqlDistance = DB::raw('(111.045*acos(cos(radians(' . $data['latitude'] . '))
+               * cos(radians(users.latitude))
+               * cos(radians(users.longitude)
+               - radians(' . $data['longitude'] . '))
+               + sin( radians(' . $data['latitude'] . '))
+               * sin( radians(users.latitude))))');
+
+            return Food::with(['shop', 'tags'])
+                ->join('users', 'users.id', '=','foods.shop_id')
+                ->join('reviews', 'foods.id', '=', 'reviews.food_id')
+                ->select('users.latitude',
+                    'users.longitude', 'foods.*')
+                ->where('foods.id', $id)
+                ->selectRaw("{$sqlDistance} AS distance")
+                ->selectRaw("avg(reviews.rate) as rating")
+                ->orderBy('distance')
+                ->get();
+        } else {
+            return Food::with(['shop', 'tags'])
+                ->findOrFail($id);
+        }
+
     }
 
     public function update($data, $id)
@@ -65,13 +71,15 @@ class FoodRepository implements FoodRepositoryInterface
     public function search($keyword)
     {
         return Food::query()
+            ->with('shop')
             ->where("name", 'LIKE', "%{$keyword}%")
             ->get();
     }
 
     public function recommendFood($food_id, $shop_id)
     {
-        return Food::where("id", '<>', $food_id)
+        return Food::with('shop')
+            ->where("id", '<>', $food_id)
             ->where("shop_id", $shop_id)
             ->inRandomOrder(5)
             ->get();

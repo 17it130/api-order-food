@@ -18,10 +18,10 @@
                     <form method="POST" action="{{ route('food.update', $food->id) }}" enctype='multipart/form-data' id="form-horizontal" class="form-horizontal form-wizard-wrapper">
                     @method('PUT')
                 @else
-                    <form method="POST" action="{{ route('food.store') }}" enctype='multipart/form-data' id="form-horizontal" class="form-horizontal form-wizard-wrapper">  
+                    <form method="POST" action="{{ route('food.store') }}" enctype='multipart/form-data' id="form-horizontal" class="form-horizontal form-wizard-wrapper">
                 @endif
                     @csrf
-                    
+
                     <!-- <h3>Seller Details</h3> -->
                     <fieldset>
                         <div class="row">
@@ -52,7 +52,7 @@
                                         <select id="shop_id" name="shop_id" class="form-control" required>
                                             <option value="">-- Hãy chọn cửa hàng --</option>
                                             @foreach ($shops as $shop)
-                                                <option value="{{ $shop->id }}" {{ isset($food->shop_id) ? $shop->id == $food->shop_id ? 'selected' : '' : '' }}>{{ $shop->name }}</option>
+                                                <option value="{{ $shop->id }}" {{ isset($food->shop_id) ? $shop->id == $food->shop_id ? 'selected' : '' : '' }}>{{ isset($shop->public_name) ? $shop->public_name : $shop->name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -80,12 +80,12 @@
                                     <div class="col-12">
                                         <div class="card">
                                             <div class="card-body">
-                
+
                                                 <h4 class="mt-0 header-title">Ảnh</h4>
                                                 <!-- <p class="text-muted m-b-30">DropzoneJS is an open source library
                                                     that provides drag’n’drop file uploads with image previews.
                                                 </p> -->
-                
+
                                                 <div class="m-b-30">
                                                     @if(isset($food->images) && $food->images != null)
                                                         <img src="{{ asset($food->images) }}" id="photoThumbnail" class="img-thumbnail mb-2"
