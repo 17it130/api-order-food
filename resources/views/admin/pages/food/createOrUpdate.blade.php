@@ -46,17 +46,19 @@
                                         <textarea id="description" name="description" rows="4" class="form-control">{{ isset($food->description) ? $food->description : '' }}</textarea>
                                     </div>
                                 </div>
-                                <div class="form-group row">
-                                    <label for="" class="col-lg-3 col-form-label">Cửa hàng</label>
-                                    <div class="col-lg-9">
-                                        <select id="shop_id" name="shop_id" class="form-control" required>
-                                            <option value="">-- Hãy chọn cửa hàng --</option>
-                                            @foreach ($shops as $shop)
-                                                <option value="{{ $shop->id }}" {{ isset($food->shop_id) ? $shop->id == $food->shop_id ? 'selected' : '' : '' }}>{{ isset($shop->public_name) ? $shop->public_name : $shop->name }}</option>
-                                            @endforeach
-                                        </select>
+                                @if(Auth::user()->role == 'admin')
+                                    <div class="form-group row">
+                                        <label for="" class="col-lg-3 col-form-label">Cửa hàng</label>
+                                        <div class="col-lg-9">
+                                            <select id="shop_id" name="shop_id" class="form-control" required>
+                                                <option value="">-- Hãy chọn cửa hàng --</option>
+                                                @foreach ($shops as $shop)
+                                                    <option value="{{ $shop->id }}" {{ isset($food->shop_id) ? $shop->id == $food->shop_id ? 'selected' : '' : '' }}>{{ isset($shop->public_name) ? $shop->public_name : $shop->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
                                     </div>
-                                </div>
+                                @endif
                                 <div class="form-group row">
                                     <label for="" class="col-lg-3 col-form-label">Danh mục</label>
                                     <div class="col-lg-9">

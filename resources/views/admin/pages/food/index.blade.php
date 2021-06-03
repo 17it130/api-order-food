@@ -29,7 +29,7 @@
                             <th>Tên</th>
                             <th>Ảnh</th>
                             <th>Giá</th>
-                            <th>Đánh giá</th>
+                            <th>Lượt mua</th>
                             <th>Cửa hàng</th>
                             <th>Danh mục</th>
                             <th>Thao tác</th>
@@ -45,9 +45,9 @@
                                     <img src="{{ asset($food->images) }}" alt="Image" style="max-height: 100px"/>
                                 </td>
                                 <td>{{ $food->price }}</td>
-                                <td>{{ $food->rating }}</td>
-                                <td>{{ $food->shop_name }}</td>
-                                <td>{{ $food->category_name }}</td>
+                                <td>{{ $food->order_time }}</td>
+                                <td>{{ $food->shop->name }}</td>
+                                <td>{{ $food->category->name }}</td>
                                 <td class="text-center">
                                     <a href="{{ route('food.edit', $food->id) }}" class="btn btn-warning btn-sm waves-effect waves-light">
                                         <i class="fa fa-pencil-alt"></i>

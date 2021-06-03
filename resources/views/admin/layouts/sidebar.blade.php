@@ -29,13 +29,13 @@
                     <a href="{{ route('user.index') }}" class="waves-effect"><i class="ti-user"></i><span> Quản lý người dùng </span></a>
                 </li>
 
-                <li>
-                    <a href="{{ route('payment.index') }}" class="waves-effect"><i class="ti-user"></i><span> Quản lý slider </span></a>
-                </li>
+{{--                <li>--}}
+{{--                    <a href="{{ route('payment.index') }}" class="waves-effect"><i class="ti-user"></i><span> Quản lý slider </span></a>--}}
+{{--                </li>--}}
 
-                <li>
-                    <a href="{{ route('slider.index') }}" class="waves-effect"><i class="ti-user"></i><span> Quản lý thanh toán </span></a>
-                </li>
+{{--                <li>--}}
+{{--                    <a href="{{ route('slider.index') }}" class="waves-effect"><i class="ti-user"></i><span> Quản lý thanh toán </span></a>--}}
+{{--                </li>--}}
                 @endif
             </ul>
 

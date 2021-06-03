@@ -41,7 +41,7 @@
                                 <td>{{ $order->order_date }}</td>
                                 <td>{{ $order->order_note }}</td>
                                 <td>
-                                    <span class="badge badge-success">{{ $order->status == 0 ? 'Đang chờ xác nhận' : ($order->status == 1 ? 'Đã xác nhận' : ($order->status == 2 ? 'Đang giao' : 'Đã giao')) }}</span>
+                                    <span class="badge badge-success">{{ $order->status == 0 ? 'Đã xác nhận' : ($order->status == 1 ? 'Đang giao' :  'Đã giao') }}</span>
                                 </td>
                                 <td class="text-center">
                                     <a href="{{ route('order.edit', $order->id) }}" class="btn btn-primary btn-sm waves-effect waves-light">

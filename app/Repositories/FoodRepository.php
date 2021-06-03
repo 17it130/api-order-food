@@ -29,7 +29,7 @@ class FoodRepository implements FoodRepositoryInterface
                 ->orderByDesc('distance')
                 ->get();
         } else {
-            return Food::with('shop')->get();
+            return Food::with(['shop', 'category'])->get();
         }
     }
 
@@ -102,9 +102,16 @@ class FoodRepository implements FoodRepositoryInterface
 
     public function getFoodWithCategoryShop()
     {
-        return Food::join('users', 'users.id', 'foods.shop_id')
+        return Food::with('shop')
+            ->join('users', 'users.id', 'foods.shop_id')
             ->join('categories', 'foods.category_id', 'categories.id')
             ->select('foods.*', 'users.name as shop_name', 'categories.name as category_name')
+            ->get();
+    }
+
+    public function getFoodByShop($shop_id) {
+        return Food::with(['shop', 'category'])
+            ->where('shop_id', $shop_id)
             ->get();
     }
 

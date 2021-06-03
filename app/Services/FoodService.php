@@ -47,6 +47,10 @@ class FoodService
         return $this->foodRepository->getFoodWithCategoryShop();
     }
 
+    public function getFoodByShop($shop_id) {
+        return $this->foodRepository->getFoodByShop($shop_id);
+    }
+
     public function search($keyword) {
         return $this->foodRepository->search($keyword);
     }

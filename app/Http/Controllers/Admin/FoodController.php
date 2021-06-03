@@ -7,6 +7,7 @@ use App\Services\FoodService;
 use App\Services\UserService;
 use App\Services\CategoryService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use PHPUnit\Exception;
 
 use App\Http\Requests\FoodRequest;
@@ -31,7 +32,11 @@ class FoodController extends Controller
      */
     public function index()
     {
-        $foods = $this->foodService->getFoodWithCategoryShop();
+        if (Auth::user()->role == 'admin') {
+            $foods = $this->foodService->getAll([]);
+        } else {
+            $foods = $this->foodService->getFoodByShop(Auth::user()->id);
+        }
 
         return view('admin.pages.food.index', compact('foods'));
     }
@@ -124,8 +129,12 @@ class FoodController extends Controller
             $food_data['description'] = $request->description;
         }
 
-        if ($request->has('shop_id')) {
-            $food_data['shop_id'] = $request->shop_id;
+        if (Auth::user()->role == 'admin') {
+            if ($request->has('shop_id')) {
+                $food_data['shop_id'] = $request->shop_id;
+            }
+        } else {
+            $food_data['shop_id'] = Auth::user()->id;
         }
 
         if ($request->has('category_id')) {
