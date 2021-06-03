@@ -81,7 +81,7 @@ class OrderController extends Controller
             $order = $this->orderService->store($data);
 
             foreach ($request->input('foods') as $item) {
-                $food = $this->foodService->show($item['food_id']);
+                $food = $this->foodService->show($item['food_id'], []);
                 $food->increment('order_time');
 
                 $detail_data = [
