@@ -9,6 +9,7 @@ use App\Services\NotificationService;
 use App\Services\UserService;
 use App\Services\CategoryService;
 use App\Services\OrderService;
+use App\Traits\PushNotificationTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use PHPUnit\Exception;
@@ -20,6 +21,13 @@ use Illuminate\Support\Facades\Storage;
 class OrderController extends Controller
 {
     protected $foodService;
+    protected $userService;
+    protected $categoryService;
+    protected $orderService;
+    protected $notificationService;
+    protected $deviceService;
+
+    use PushNotificationTrait;
 
     public function __construct(FoodService $foodService, UserService $userService, CategoryService $categoryService, OrderService $orderService, NotificationService $notificationService, DeviceService $deviceService) {
         $this->foodService = $foodService;
