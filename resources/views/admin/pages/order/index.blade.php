@@ -34,10 +34,12 @@
                         @foreach($orders as $order)
                             <tr>
                                 <td>{{ $loop->index+1 }}</td>
-                                <td>{{ $order->customer_name }}</td>
-                                <td>{{ $order->customer_phone }}</td>
+                                <td>{{ $order->user->name }}</td>
+                                <td>{{ $order->user->phone }}</td>
+                                <td>{{ $order->order_code }}</td>
                                 <td>{{ $order->totalPrice }}</td>
                                 <td>{{ $order->order_date }}</td>
+                                <td>{{ $order->order_note }}</td>
                                 <td>
                                     <span class="badge badge-primary">{{ $order->payment_id == 0 ? 'Thanh toán khi nhận hàng' : 'Thanh toán Online' }}</span>
                                 </td>

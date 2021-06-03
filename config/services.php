@@ -33,7 +33,7 @@ return [
     'google' => [
         'client_id' => '1086092518209-ftnve6v9u2v5fpundc1t9oc56r0gthhl.apps.googleusercontent.com',
         'client_secret' => 'NAu5V2Ke9F0wq_PXm-jAKIzn',
-        'redirect' => 'https://tikeeshop.me/google/callback',
+        'redirect' => 'http://localhost:8000/google/callback',
     ],
 
 ];

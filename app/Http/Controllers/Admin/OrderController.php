@@ -8,6 +8,7 @@ use App\Services\UserService;
 use App\Services\CategoryService;
 use App\Services\OrderService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use PHPUnit\Exception;
 
 use App\Http\Requests\FoodRequest;
@@ -31,7 +32,11 @@ class OrderController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index() {
-        $orders = $this->orderService->getAllWithUser();
+        if (Auth::user()->role == 'admin') {
+            $orders = $this->orderService->getAll();
+        } else {
+            $orders = $this->orderService->getAllWithUser(Auth::user()->id);
+        }
 
         return view('admin.pages.order.index', compact('orders'));
     }
@@ -58,7 +63,7 @@ class OrderController extends Controller
      */
     public function update(Request $request, $id) {
         $order_old = $this->orderService->show($id);
-        
+
         $data = [
             'order_date' => $order_old[0]->order_date,
             'totalPrice' => $order_old[0]->totalPrice,

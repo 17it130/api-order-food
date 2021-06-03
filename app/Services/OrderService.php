@@ -18,8 +18,8 @@ class OrderService
         return $this->orderRepository->getAll();
     }
 
-    public function getAllWithUser() {
-        return $this->orderRepository->getAllWithUser();
+    public function getAllWithUser($user_id) {
+        return $this->orderRepository->getAllWithUser($user_id);
     }
 
     public function show($id) {
