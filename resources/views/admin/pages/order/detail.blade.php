@@ -59,7 +59,7 @@
                                                                 <i class="mdi mdi-checkbox-marked-circle-outline" style="font-size: 45px; color: blue"></i>
                                                             </div>
                                                             <div class="custom-control custom-radio custom-control-inline">
-                                                                <input type="radio" id="1" name="status" class="custom-control-input"
+                                                                <input type="radio" id="0" name="status" class="custom-control-input"
                                                                     value="0" {{ $order[0]->status == 0 ? 'checked' : ''}}>
                                                                 <label class="custom-control-label" for="0">Đã xác nhân</label>
                                                             </div>
@@ -70,7 +70,7 @@
                                                                 <i class="mdi mdi-truck" style="font-size: 45px; color: orange"></i>
                                                             </div>
                                                             <div class="custom-control custom-radio custom-control-inline">
-                                                                <input type="radio" id="2" name="status" class="custom-control-input"
+                                                                <input type="radio" id="1" name="status" class="custom-control-input"
                                                                     value="1" {{ $order[0]->status == 1 ? 'checked' : ''}}>
                                                                 <label class="custom-control-label" for="1">Đang giao hàng</label>
                                                             </div>
@@ -81,7 +81,7 @@
                                                                 <i class="mdi mdi-checkbox-multiple-marked" style="font-size: 45px; color: green"></i>
                                                             </div>
                                                             <div class="custom-control custom-radio custom-control-inline">
-                                                                <input type="radio" id="3" name="status" class="custom-control-input"
+                                                                <input type="radio" id="2" name="status" class="custom-control-input"
                                                                     value="2" {{ $order[0]->status == 2 ? 'checked' : ''}}>
                                                                 <label class="custom-control-label" for="2">Đã giao hàng</label>
                                                             </div>
