@@ -29,7 +29,7 @@ class ReviewController extends Controller
             $data = [
                 'title' => $request->input('title'),
                 'content' => $request->input('content'),
-                'image' => url("/storage/" . $path),
+                'image' => isset($path) ? url("/storage/" . $path) : '',
                 'rate' => $request->input('rate'),
                 'user_id' => JWTAuth::user()->id,
                 'food_id' => $request->input('food_id')
