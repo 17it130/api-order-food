@@ -19,7 +19,7 @@ class Order extends Model
         return $this->belongsToMany(User::class, 'customer_id');
     }
 
-    public function hasMany() {
+    public function notification() {
         return $this->belongsTo(Notification::class, 'order_id');
     }
 }
