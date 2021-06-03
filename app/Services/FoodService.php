@@ -38,7 +38,7 @@ class FoodService
         return $this->foodRepository->delete($id);
     }
 
-    public function getFoodByCategoryId($cat_id)
+    public function getFoodByCategoryId($cat_id, $data)
     {
         return $this->foodRepository->getFoodByCategoryId($cat_id, $data);
     }
