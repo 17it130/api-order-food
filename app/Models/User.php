@@ -67,7 +67,7 @@ class User extends Authenticatable implements JWTSubject
 
     public function orderDetail()
     {
-        return $this->hasMany(OrderDetail::class);
+        return $this->hasOne(OrderDetail::class);
     }
 
     public function notification()
