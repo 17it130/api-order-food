@@ -20,6 +20,6 @@ class OrderDetail extends Model
     }
 
     public function shop() {
-        return $this->belongsTo(User::class, 'id', 'shop_id');
+        return $this->belongsTo(User::class, 'shop_id', 'id');
     }
 }
