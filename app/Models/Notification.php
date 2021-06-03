@@ -16,6 +16,6 @@ class Notification extends Model
     }
 
     public function order() {
-        return $this->belongsToMany(Order::class, 'order_id');
+        return $this->hasMany(Order::class);
     }
 }
