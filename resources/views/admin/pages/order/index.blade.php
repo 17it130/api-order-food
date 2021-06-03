@@ -14,13 +14,6 @@
             <div class="card-body">
 
                 <h4 class="mt-0 header-title">Danh sách các hóa đơn</h4><br>
-                <!-- <div class="float-right d-none d-md-block">
-                    <div class="dropdown">
-                        <a class="btn btn-primary waves-effect waves-light" href="{{ route('food.create') }}">
-                            <i class="mdi mdi-pencil-outline mr-2"></i> Thêm mới hóa đơn
-                        </a>
-                    </div>
-                </div> -->
 
                 <table id="datatable" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                     <thead>
@@ -28,11 +21,12 @@
                             <th>#</th>
                             <th>Tên khách hàng</th>
                             <th>Số điện thoại</th>
-                            <th>Tổng thanh toán</th>
+                            <th>Mã đơn hàng</th>
+                            <th>Tổng</th>
                             <th>Ngày đặt</th>
-                            <th>Phương thức thanh toán</th>
+                            <th>Ghi chú</th>
                             <th>Trạng thái</th>
-                            <th>Xem chi tiết</th>
+                            <th>Hành động</th>
                         </tr>
                     </thead>
 

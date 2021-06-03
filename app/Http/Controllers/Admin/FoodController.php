@@ -115,20 +115,19 @@ class FoodController extends Controller
         if ($request->has('name')) {
             $food_data['name'] = $request->name;
         }
+
         if ($request->has('price')) {
             $food_data['price'] = $request->price;
         }
+
         if ($request->has('description')) {
             $food_data['description'] = $request->description;
         }
-        if ($request->has('rating')) {
-            $food_data['rating'] = $request->rating;
-        } else {
-            $food_data['rating'] = $food_old->rating;
-        }
+
         if ($request->has('shop_id')) {
             $food_data['shop_id'] = $request->shop_id;
         }
+
         if ($request->has('category_id')) {
             $food_data['category_id'] = $request->category_id;
         }

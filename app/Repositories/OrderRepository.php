@@ -32,7 +32,7 @@ class OrderRepository implements OrderRepositoryInterface {
     {
         return Order::with(['detail' => function($q) {
                         $q->with('food');
-                    }])
+                    }, 'user'])
                     ->where('id', $id)
                     ->get();
     }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Services\DeviceService;
 use App\Services\SocialService;
 use App\Services\UserService;
 use Illuminate\Http\Request;
@@ -12,11 +13,13 @@ class AuthController extends Controller
 {
     protected $userService;
     protected $socialService;
+    protected $deviceService;
 
-    public function __construct(UserService $userService, SocialService $socialService)
+    public function __construct(UserService $userService, SocialService $socialService, DeviceService $deviceService)
     {
         $this->userService = $userService;
         $this->socialService = $socialService;
+        $this->deviceService = $deviceService;
     }
 
     public function loginWithGoogle(Request $request)
@@ -26,7 +29,7 @@ class AuthController extends Controller
         } else if ($request->device_type == 'ios') {
             $client_id_string = "213239061541-5072nudrlf2dpu7qdlvaub2vuvjg4m4f.apps.googleusercontent.com";
         } else if ($request->device_type == 'android') {
-            $client_id_string = "";
+            $client_id_string = "16111219766-c7cmhta2cjnmngetuumv0t3t5jdl06tm.apps.googleusercontent.com";
         }
         $client = new \Google_Client(['client_id' => $client_id_string]);
         $payload = $client->verifyIdToken($request->input('id_token'));
@@ -35,6 +38,27 @@ class AuthController extends Controller
             $isExist = $this->socialService->getBySocialId($payload['sub']);
             if (isset($isExist)) {
                 $user = $this->userService->show($isExist->user_id);
+
+                if ($request->has('device_id') && $request->has('push_token')) {
+                    $device = $this->deviceService->findByUserIdAndDeviceId($user->id, $request->input('device_id'));
+                    if (isset($device)) {
+                        $device_data = [
+                            'device_id' => $device->device_id,
+                            'push_token' => $request->input('push_token'),
+                            'device_type' => $device->device_type,
+                            'user_id' => $user->id
+                        ];
+                        $this->deviceService->update($device->id, $device_data);
+                    } else {
+                        $device_data = [
+                            'device_id' => $request->input('device_id'),
+                            'push_token' => $request->input('push_token'),
+                            'device_type' => $request->input('device_type'),
+                            'user_id' => $user->id
+                        ];
+                        $this->deviceService->store($device_data);
+                    }
+                }
 
                 return $this->generateToken($user);
             }
@@ -54,6 +78,24 @@ class AuthController extends Controller
             ];
 
             $this->socialService->store($social_data);
+
+            if (isset($device)) {
+                $device_data = [
+                    'device_id' => $device->device_id,
+                    'push_token' => $request->input('push_token'),
+                    'device_type' => $device->device_type,
+                    'user_id' => $user->id
+                ];
+                $this->deviceService->update($device->id, $device_data);
+            } else {
+                $device_data = [
+                    'device_id' => $request->input('device_id'),
+                    'push_token' => $request->input('push_token'),
+                    'device_type' => $request->input('device_type'),
+                    'user_id' => $user->id
+                ];
+                $this->deviceService->store($device_data);
+            }
 
             return $this->generateToken($user);
         } else {

@@ -32,6 +32,17 @@ Route::group(['middleware' => 'web'], function () {
         Route::resource('/food', FoodController::class);
         Route::resource('/order', OrderController::class);
         Route::resource('/user', UserController::class);
+        Route::resource('/payment', PaymentController::class);
+        Route::resource('/slider', SliderController::class);
+
+        // For hosting
+        Route::get('/migrate', function () {
+            Artisan::call('migrate');
+        });
+        Route::get('/seeder', function () {
+            Artisan::call('db:seed');
+        });
+
         Route::get('/logout', [AuthController::class, 'logout'])->name('auth.logout');
     });
 });
