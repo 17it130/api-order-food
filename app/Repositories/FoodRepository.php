@@ -75,9 +75,29 @@ class FoodRepository implements FoodRepositoryInterface
         return Food::findOrFail($id)->delete();
     }
 
-    public function getFoodByCategoryId($cat_id)
+    public function getFoodByCategoryId($cat_id, $data)
     {
-        return Food::with('shop')->where('category_id', $cat_id)->get();
+        if (isset($data['latitude']) && isset($data['longitude'])) {
+            $sqlDistance = DB::raw('(111.045*acos(cos(radians(' . $data['latitude'] . '))
+               * cos(radians(users.latitude))
+               * cos(radians(users.longitude)
+               - radians(' . $data['longitude'] . '))
+               + sin( radians(' . $data['latitude'] . '))
+               * sin( radians(users.latitude))))');
+
+            return Food::with(['shop', 'tags'])
+                ->join('users', 'users.id', '=','foods.shop_id')
+                ->join('reviews', 'foods.id', '=', 'reviews.food_id')
+                ->select('users.latitude',
+                    'users.longitude', 'foods.*')
+                ->where('foods.category_id', $cat_id)
+                ->selectRaw("{$sqlDistance} AS distance")
+                ->selectRaw("avg(reviews.rate) as rating")
+                ->orderBy('distance')
+                ->get();
+        } else {
+            return Food::with('shop')->where('category_id', $cat_id)->get();
+        }
     }
 
     public function getFoodWithCategoryShop()

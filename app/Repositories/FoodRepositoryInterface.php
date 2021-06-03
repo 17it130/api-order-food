@@ -13,7 +13,7 @@ interface FoodRepositoryInterface {
 
     public function delete($id);
 
-    public function getFoodByCategoryId($cat_id);
+    public function getFoodByCategoryId($cat_id, $data);
 
     public function search($keyword);
 

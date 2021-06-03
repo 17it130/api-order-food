@@ -41,9 +41,17 @@ class CategoryController extends Controller
     public function getFoodByCategoryId($id)
     {
         try {
+            if (Request::has('latitude') && Request::has('longitude')) {
+                $data = [
+                    'latitude' => Request::input('latitude'),
+                    'longitude' => Request::input('longitude')
+                ];
+            } else {
+                $data = [];
+            }
             $result = [
                 'status' => 1,
-                'foods' => $this->foodService->getFoodByCategoryId($id)
+                'foods' => $this->foodService->getFoodByCategoryId($id, $data)
             ];
         } catch (Exception $e) {
             $result = [

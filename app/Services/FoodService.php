@@ -40,7 +40,7 @@ class FoodService
 
     public function getFoodByCategoryId($cat_id)
     {
-        return $this->foodRepository->getFoodByCategoryId($cat_id);
+        return $this->foodRepository->getFoodByCategoryId($cat_id, $data);
     }
 
     public function getFoodWithCategoryShop() {
