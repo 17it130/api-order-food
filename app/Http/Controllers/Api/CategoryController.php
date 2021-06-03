@@ -51,7 +51,7 @@ class CategoryController extends Controller
             }
             $result = [
                 'status' => 1,
-                'foods' => $this->foodService->getFoodByCategoryId($id, $data)
+                'foods' => $this->foodService->getFoodByCategoryId($id, isset($data['latitude']) ? $data : [])
             ];
         } catch (Exception $e) {
             $result = [
