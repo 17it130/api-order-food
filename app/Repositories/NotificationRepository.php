@@ -8,7 +8,7 @@ class NotificationRepository implements NotificationRepositoryInterface
 {
     public function getAll()
     {
-        return Notification::all();
+        return Notification::with('order')->all();
     }
 
     public function getNotificationByUserId($user_id)
