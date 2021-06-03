@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Services\DeviceService;
+use App\Services\FoodService;
 use App\Services\NotificationService;
 use App\Services\OrderService;
 use App\Traits\PushNotificationTrait;
@@ -18,14 +19,16 @@ class OrderController extends Controller
     use PushNotificationTrait;
 
     protected $orderService;
+    protected $foodService;
     protected $notificationService;
     protected $deviceService;
 
-    public function __construct(OrderService $orderService, NotificationService $notificationService, DeviceService $deviceService)
+    public function __construct(OrderService $orderService, NotificationService $notificationService, DeviceService $deviceService, FoodService $foodService)
     {
         $this->orderService = $orderService;
         $this->notificationService = $notificationService;
         $this->deviceService = $deviceService;
+        $this->foodService = $foodService;
     }
 
     public function getAll()
@@ -78,6 +81,9 @@ class OrderController extends Controller
             $order = $this->orderService->store($data);
 
             foreach ($request->input('foods') as $item) {
+                $food = $this->foodService->show($item['food_id']);
+                $food->increment('order_time');
+
                 $detail_data = [
                     'order_id' => $order->id,
                     'food_id' => $item['food_id'],
@@ -92,7 +98,8 @@ class OrderController extends Controller
             $notification_data = [
                 'title' => 'Order Success!',
                 'content' => 'You have successfully placed an order with the order number '.$data['order_code'],
-                'user_id' => Auth::user()->id
+                'user_id' => Auth::user()->id,
+                'order_id' => $order->id
             ];
 
             $this->notificationService->store($notification_data);
