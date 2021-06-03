@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Services\CategoryService;
 use App\Services\FoodService;
 use Exception;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Request;
 
 class CategoryController extends Controller
 {
