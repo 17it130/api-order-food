@@ -41,9 +41,6 @@
                                 <td>{{ $order->order_date }}</td>
                                 <td>{{ $order->order_note }}</td>
                                 <td>
-                                    <span class="badge badge-primary">{{ $order->payment_id == 0 ? 'Thanh toán khi nhận hàng' : 'Thanh toán Online' }}</span>
-                                </td>
-                                <td>
                                     <span class="badge badge-success">{{ $order->status == 0 ? 'Đang chờ xác nhận' : ($order->status == 1 ? 'Đã xác nhận' : ($order->status == 2 ? 'Đang giao' : 'Đã giao')) }}</span>
                                 </td>
                                 <td class="text-center">

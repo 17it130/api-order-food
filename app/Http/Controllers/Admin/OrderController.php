@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Services\FoodService;
+use App\Services\NotificationService;
 use App\Services\UserService;
 use App\Services\CategoryService;
 use App\Services\OrderService;
@@ -19,11 +20,12 @@ class OrderController extends Controller
 {
     protected $foodService;
 
-    public function __construct(FoodService $foodService, UserService $userService, CategoryService $categoryService, OrderService $orderService) {
+    public function __construct(FoodService $foodService, UserService $userService, CategoryService $categoryService, OrderService $orderService, NotificationService $notificationService) {
         $this->foodService = $foodService;
         $this->userService = $userService;
         $this->categoryService = $categoryService;
         $this->orderService = $orderService;
+        $this->notificationService = $notificationService;
     }
 
     /**
@@ -49,9 +51,8 @@ class OrderController extends Controller
      */
     public function edit($id) {
         $order = $this->orderService->show($id);
-        $customer = $this->userService->show($order[0]->customer_id);
 
-        return view('admin.pages.order.detail', compact('order', 'customer'));
+        return view('admin.pages.order.detail', compact('order'));
     }
 
     /**
@@ -63,6 +64,38 @@ class OrderController extends Controller
      */
     public function update(Request $request, $id) {
         $order_old = $this->orderService->show($id);
+
+        if ($request->has('status') && $request->input('status') == 2) {
+            $notification_data = [
+                'title' => 'Order has been successfully delivered!',
+                'content' => 'Your order has been delivered successfully. Wish you delicious!',
+                'user_id' => $order_old[0]->customer_id,
+                'order_id' => $order_old[0]->id
+            ];
+
+            $this->notificationService->store($notification_data);
+
+            $devices = $this->deviceService->getDevicesByUserId($order_old[0]->customer_id);
+
+            if (isset($devices)) {
+                foreach ($devices as $device) {
+                    $data = [
+                        'func_name' => config('firebase.notification.func'),
+                        'screen' => config('firebase.notification.screen'),
+                        'device_type' => $device->device_type,
+                    ];
+
+                    $content = [
+                        "title" => $notification_data['title'],
+                        "body" => $notification_data['content'],
+                        'sound' => config('firebase.sound')
+                    ];
+
+                    // Push notification
+                    $this->pushMessage($device->push_token, $content, $data);
+                }
+            }
+        }
 
         $data = [
             'order_date' => $order_old[0]->order_date,
