@@ -18,4 +18,8 @@ class OrderDetail extends Model
     public function food() {
         return $this->belongsTo(Food::class, 'food_id');
     }
+
+    public function shop() {
+        return $this->belongsTo(User::class, 'shop_id');
+    }
 }
