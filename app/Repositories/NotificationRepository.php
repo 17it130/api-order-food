@@ -18,7 +18,7 @@ class NotificationRepository implements NotificationRepositoryInterface
 
     public function show($id)
     {
-        return Notification::findOrFail($id);
+        return Notification::with('order')->findOrFail($id);
     }
 
     public function update($data, $id)
