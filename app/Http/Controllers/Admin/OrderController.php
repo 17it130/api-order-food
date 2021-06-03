@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Services\DeviceService;
 use App\Services\FoodService;
 use App\Services\NotificationService;
 use App\Services\UserService;
@@ -20,12 +21,13 @@ class OrderController extends Controller
 {
     protected $foodService;
 
-    public function __construct(FoodService $foodService, UserService $userService, CategoryService $categoryService, OrderService $orderService, NotificationService $notificationService) {
+    public function __construct(FoodService $foodService, UserService $userService, CategoryService $categoryService, OrderService $orderService, NotificationService $notificationService, DeviceService $deviceService) {
         $this->foodService = $foodService;
         $this->userService = $userService;
         $this->categoryService = $categoryService;
         $this->orderService = $orderService;
         $this->notificationService = $notificationService;
+        $this->deviceService = $deviceService;
     }
 
     /**
