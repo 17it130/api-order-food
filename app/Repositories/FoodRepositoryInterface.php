@@ -3,7 +3,7 @@
 namespace App\Repositories;
 
 interface FoodRepositoryInterface {
-    public function getAll();
+    public function getAll($data);
 
     public function store($data);
 

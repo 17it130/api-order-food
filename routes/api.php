@@ -39,6 +39,7 @@ Route::group(['middleware' => 'jwt'], function () {
 
     Route::prefix('order')->group(function () {
         Route::get('/', [OrderController::class, 'getAll']);
+        Route::get('/user', [OrderController::class, 'getAllByUserId']);
         Route::get('/show/{id}', [OrderController::class, 'show']);
         Route::post('/save', [OrderController::class, 'store']);
         Route::put('/update/{id}', [OrderController::class, 'update']);

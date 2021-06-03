@@ -195,4 +195,20 @@ class OrderController extends Controller
 
         return response()->json($result);
     }
+
+    public function getAllByUserId() {
+        try {
+            $result = [
+                'status' => 1,
+                'orders' => $this->orderService->getOrdersByUser(Auth::user()->id)
+            ];
+        } catch (Exception $e) {
+            $result = [
+                'status' => 0,
+                'message' => $e->getMessage()
+            ];
+        }
+
+        return response()->json($result);
+    }
 }

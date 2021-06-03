@@ -8,9 +8,29 @@ use Illuminate\Support\Facades\DB;
 class FoodRepository implements FoodRepositoryInterface
 {
 
-    public function getAll()
+    public function getAll($data)
     {
-        return Food::with('shop')->get();
+        if (isset($data['latitude']) && isset($data['longitude'])) {
+            $sqlDistance = DB::raw('(111.045*acos(cos(radians(' . $data['latitude'] . '))
+               * cos(radians(users.latitude))
+               * cos(radians(users.longitude)
+               - radians(' . $data['longitude'] . '))
+               + sin( radians(' . $data['latitude'] . '))
+               * sin( radians(users.latitude))))');
+
+            return Food::with(['shop', 'tags'])
+                ->leftJoin('users', 'users.id', '=','foods.shop_id')
+                ->leftJoin('reviews', 'foods.id', '=', 'reviews.food_id')
+                ->select('users.latitude',
+                    'users.longitude', 'foods.*')
+                ->selectRaw("{$sqlDistance} AS distance")
+                ->selectRaw("CASE WHEN reviews.rate IS NOT NULL THEN avg(reviews.rate) ELSE 0 END as rating")
+                ->groupBy('foods.id')
+                ->orderByDesc('distance')
+                ->get();
+        } else {
+            return Food::with('shop')->get();
+        }
     }
 
     public function store($data)

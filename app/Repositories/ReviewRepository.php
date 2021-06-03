@@ -28,7 +28,9 @@ class ReviewRepository implements ReviewRepositoryInterface {
 
     public function getReviewByFoodId($food_id)
     {
-        return Review::with('user')->where('food_id', $food_id)
+        return Review::join('users', 'foods.shop_id', '=', 'users.id')
+            ->where('food_id', $food_id)
+            ->select('reviews.*', 'users.profile_image', 'users.name')
             ->get();
     }
 

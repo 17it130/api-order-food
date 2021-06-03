@@ -21,8 +21,7 @@ class UserRepository implements UserRepositoryInterface
 
     public function show($id)
     {
-        return User::with('order')
-            ->findOrFail($id);
+        return User::findOrFail($id);
     }
 
     public function update($data, $id)

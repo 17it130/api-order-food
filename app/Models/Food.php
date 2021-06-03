@@ -31,14 +31,6 @@ class Food extends Model
         return $this->belongsToMany(Tag::class);
     }
 
-    public function reviews() {
-        return $this->belongsTo(Review::class);
-    }
-
-    public function getSumOfRating() {
-        return $this->reviews()->sum('rate');
-    }
-
     public function createTags($str) {
         $tagIds = [];
 

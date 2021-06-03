@@ -13,9 +13,9 @@ class FoodService
         $this->foodRepository = $foodRepository;
     }
 
-    public function getAll()
+    public function getAll($data)
     {
-        return $this->foodRepository->getAll();
+        return $this->foodRepository->getAll($data);
     }
 
     public function store($data)

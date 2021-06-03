@@ -17,9 +17,17 @@ class FoodController extends Controller
 
     public function getAll() {
         try {
+            if (Request::has('latitude') && Request::has('longitude')) {
+                $data = [
+                    'latitude' => Request::input('latitude'),
+                    'longitude' => Request::input('longitude')
+                ];
+            } else {
+                $data = [];
+            }
             $result = [
                 'status' => 1,
-                'foods' => $this->foodService->getAll()
+                'foods' => $this->foodService->getAll(isset($data['latitude']) ? $data : [])
             ];
         } catch (Exception $e) {
             $result = [
