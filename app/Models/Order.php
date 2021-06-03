@@ -18,4 +18,8 @@ class Order extends Model
     public function user() {
         return $this->belongsToMany(User::class, 'customer_id');
     }
+
+    public function hasMany() {
+        return $this->belongsTo(Notification::class, 'order_id');
+    }
 }
