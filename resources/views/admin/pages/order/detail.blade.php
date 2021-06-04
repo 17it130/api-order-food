@@ -19,25 +19,25 @@
                             <div class="form-group row" style="padding: 0px 15px">
                                 <label  class="col-lg-3">Họ tên:</label>
                                 <div class="col-lg-9">
-                                    <p>{{ isset($order[0]->name) ? $order[0]->name : '' }}</p>
+                                    <p>{{ isset($order[0]->user->name) ? $order[0]->user->name : '' }}</p>
                                 </div>
                             </div>
                             <div class="form-group row" style="padding: 0px 15px">
                                 <label  class="col-lg-3">Số điện thoại:</label>
                                 <div class="col-lg-9">
-                                    <p>{{ isset($order[0]->phone) ? $order[0]->phone : '' }}</p>
+                                    <p>{{ isset($order[0]->user->phone) ? $order[0]->user->phone : '' }}</p>
                                 </div>
                             </div>
                             <div class="form-group row" style="padding: 0px 15px">
                                 <label  class="col-lg-3">Email:</label>
                                 <div class="col-lg-9">
-                                    <p>{{ isset($order[0]->email) ? $order[0]->email : '' }}</p>
+                                    <p>{{ isset($order[0]->user->email) ? $order[0]->user->email : '' }}</p>
                                 </div>
                             </div>
                             <div class="form-group row" style="padding: 0px 15px">
                                 <label  class="col-lg-3">Địa chỉ:</label>
                                 <div class="col-lg-9">
-                                    <p>{{ isset($order[0]->address) ? $order[0]->address : '' }}</p>
+                                    <p>{{ isset($order[0]->user->address) ? $order[0]->user->address : '' }}</p>
                                 </div>
                             </div>
                         </div>
