@@ -157,7 +157,7 @@
                                         </td>
                                         <td>$ {{ $food->food->price }}</td>
                                         <td>{{ $food->quantity }}</td>
-                                        <td>$ {{ $food->price }}</td>
+                                        <td>$ {{ $food->food->price * $food->quantity }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>
