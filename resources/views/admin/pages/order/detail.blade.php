@@ -155,9 +155,9 @@
                                         <td class="text-center">
                                             <img src="{{ asset($food->food->images) }}" alt="{{ $food->food->images }}" style="max-height: 100px"/>
                                         </td>
-                                        <td>{{ $food->food->price }} vnđ</td>
+                                        <td>$ {{ $food->food->price }}</td>
                                         <td>{{ $food->quantity }}</td>
-                                        <td>{{ $food->price }} vnđ</td>
+                                        <td>$ {{ $food->price }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>
